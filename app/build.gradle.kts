@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    namespace = "com.example.tsunami_tv"
+    namespace = "com.tripointeknologi.tsunami_tv"
     compileSdk = 33
 
     defaultConfig {
         manifestPlaceholders["api_key"] = project.findProperty("myApiKey") ?: "DEFAULT_API_KEY"
-        applicationId = "com.example.tsunami_tv"
+        applicationId = "com.tripointeknologi.tsunami_tv"
         minSdk = 21
         targetSdk = 33
         versionCode = 1

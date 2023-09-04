@@ -1,4 +1,4 @@
-package com.example.tsunami_tv;
+package com.tripointeknologi.tsunami_tv;
 
 import android.content.Intent;
 import android.os.Bundle;
