@@ -28,7 +28,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         // Contoh penambahan marker di Indonesia
-        LatLng indonesiaLatLng = new LatLng(-2.4833826, 117.8902853); // Koordinat Indonesia (misalnya di tengah Indonesia)
+        LatLng indonesiaLatLng = new LatLng(-8.304767382215347, 114.2901294049522); // Koordinat Indonesia (misalnya di tengah Indonesia)
         googleMap.addMarker(new MarkerOptions().position(indonesiaLatLng).title("Lokasi di Indonesia"));
 
         // Posisi kamera akan ditargetkan ke lokasi di Indonesia

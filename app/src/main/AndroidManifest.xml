@@ -19,7 +19,7 @@
         android:theme="@style/Theme.Tsunami_tv">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCoNyOpCm5oQ4vlUSfaQX5_dDd06ZNGQR4" />
+            android:value="${api_key}"/>
         <activity
             android:name=".MainActivity"
             android:banner="@drawable/app_icon_your_company"
