@@ -1,6 +1,8 @@
 package com.tripointeknologi.tsunami_tv;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
@@ -18,6 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /*
  * Main Activity class that loads {@link MainFragment}.
@@ -28,12 +31,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private List<LatLng> locations;
     private int currentLocationIndex = 0;
 
+    TextToSpeech tts;
+    Context ctx;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.maps);
         mapFragment.getMapAsync(this);
+        ctx = this;
 
         // Inisialisasi daftar lokasi
         locations = new ArrayList<>();
@@ -47,7 +54,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.getUiSettings().setMapToolbarEnabled(false);
-        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
         // Menambahkan marker untuk setiap lokasi
         for (LatLng latLng : locations) {
@@ -62,18 +69,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-
-
-
-        return super.dispatchKeyEvent(event);
-
-    }
-
-    @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
+        Log.d("TES",String.valueOf(keyCode));
         switch (keyCode) {
-            case KeyEvent.KEYCODE_DPAD_UP:
+            case 19:
                 // Tombol panah atas pada remote ditekan
                 moveCamera(Direction.UP);
                 return true; // Menghentikan event lanjutan
@@ -93,6 +92,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 // Tombol "OK" pada remote ditekan
                 showLocationInfo();
                 return true; // Menghentikan event lanjutan
+            case KeyEvent.KEYCODE_BACK:
+                closelocation();
+                return true;
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -137,7 +139,25 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng currentLocation = locations.get(currentLocationIndex);
             String locationInfo = "Keterangan Lokasi: " + currentLocation.toString();
             Toast.makeText(this, locationInfo, Toast.LENGTH_SHORT).show();
+            tts = new TextToSpeech(ctx, status -> {
+                if(status == TextToSpeech.SUCCESS){
+                    tts.setLanguage(new Locale("id", "ID"));
+                    tts.speak("Ini Lokasinya!.", TextToSpeech.QUEUE_FLUSH, null);
+                }
+            });
         }
+    }
+
+    private void closelocation(){
+        googleMap.clear();
+        for (LatLng latLng : locations) {
+            googleMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_aktif)));
+        }
+
+        LatLng targetLatLng = new LatLng(-8.497857188384717, 114.22558996122491);
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(targetLatLng,10));
     }
 
     private enum Direction {
