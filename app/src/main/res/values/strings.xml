@@ -16,4 +16,6 @@
     <!-- Error messages -->
     <string name="error_fragment_message">An error occurred</string>
     <string name="dismiss_error">Dismiss</string>
+    <string name="loading">Loading......</string>
+    <string name="ini_splash_screen">INI SPLASH SCREEN</string>
 </resources>

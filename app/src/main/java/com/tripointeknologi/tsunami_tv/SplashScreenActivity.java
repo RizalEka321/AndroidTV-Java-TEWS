@@ -8,25 +8,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private int waktu_loading=4000;
+    private static final int waktu_loading = 4000; //4 seconds
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        Thread thread = new Thread(){
-            public void run(){
-                try {
-                    sleep(1000);
-                }catch (InterruptedException e){
-                    e.printStackTrace();
-                }finally {
-                    startActivity(new Intent(SplashScreenActivity.this, MainActivity.class));
-                    finish();
-                }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
-        };
-        thread.start();
+        }, waktu_loading);
     }
 }
