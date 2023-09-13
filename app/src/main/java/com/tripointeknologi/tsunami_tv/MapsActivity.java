@@ -59,9 +59,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .position(latLng)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_aktif)));
         }
+//        Start Kamera
+        LatLng countryLatLng = new LatLng(-2.5489, 118.0149);
+        float zoomCountry = 5;
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(countryLatLng, zoomCountry));
 
         // Memulai perpindahan kamera
         LatLng targetLatlng = new LatLng(-8.497857188384717,114.22558996122491);
+
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(targetLatlng, 10));
     }
 
