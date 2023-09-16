@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.activity_maps);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_maps);
         ctx = this;
 
         // Initialize the list of locations
@@ -56,11 +56,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Initialize the map
         mapFragment.getMapAsync(this);
 
-        Button button = findViewById(R.id.button_marklist);
+        Button button = findViewById(R.id.button_marker);
+        Button button1 = findViewById(R.id.button_signal);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MainActivity.class); // Change to MainActivity
+                Intent intent = new Intent(MainActivity.this, MarkerActivity.class); // Change to MainActivity
+                startActivity(intent);
+            }
+        });
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SignalActivity.class); // Change to MainActivity
                 startActivity(intent);
             }
         });
@@ -76,42 +84,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         for (LatLng latLng : locations) {
             googleMap.addMarker(new MarkerOptions()
                     .position(latLng)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_aktif)));
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.tanda_home)));
         }
 
-        // Move the camera to a specific location (e.g., the first location in the list)
-        if (!locations.isEmpty()) {
-            LatLng targetLatlng = locations.get(0); // Get the first location in the list
-            float zoomLevel = 10; // Adjust the zoom level as needed
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(targetLatlng, zoomLevel));
-        }
-    }
+        // Start Kamera
+        LatLng countryLatLng = new LatLng(-8.51811526213963, 114.26465950699851);
+        float zoomCountry = 10;
 
-
-    private void moveCamera(MainActivity.Direction direction) {
-        switch (direction) {
-            case UP:
-                if (currentLocationIndex > 0) {
-                    currentLocationIndex--;
-                }
-                break;
-            case DOWN:
-                if (currentLocationIndex < locations.size() - 1) {
-                    currentLocationIndex++;
-                }
-                break;
-            case LEFT:
-                if (currentLocationIndex > 0) {
-                    currentLocationIndex--;
-                }
-                break;
-            case RIGHT:
-                if (currentLocationIndex < locations.size() - 1) {
-                    currentLocationIndex++;
-                }
-                break;
-        }
-        updateCamera();
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(countryLatLng, zoomCountry));
     }
 
     private void updateCamera() {
@@ -119,66 +99,5 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             LatLng nextLocation = locations.get(currentLocationIndex);
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(nextLocation, 12));
         }
-    }
-
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        Log.d("TES", String.valueOf(keyCode));
-        switch (keyCode) {
-            case 19:
-                // Tombol panah atas pada remote ditekan
-                moveCamera(MainActivity.Direction.UP);
-                return true; // Menghentikan event lanjutan
-            case KeyEvent.KEYCODE_DPAD_DOWN:
-                // Tombol panah bawah pada remote ditekan
-                moveCamera(MainActivity.Direction.DOWN);
-                return true; // Menghentikan event lanjutan
-            case KeyEvent.KEYCODE_DPAD_LEFT:
-                // Tombol panah kiri pada remote ditekan
-                moveCamera(MainActivity.Direction.LEFT);
-                return true; // Menghentikan event lanjutan
-            case KeyEvent.KEYCODE_DPAD_RIGHT:
-                // Tombol panah kanan pada remote ditekan
-                moveCamera(MainActivity.Direction.RIGHT);
-                return true; // Menghentikan event lanjutan
-            case KeyEvent.KEYCODE_DPAD_CENTER:
-                // Tombol "OK" pada remote ditekan
-                showLocationInfo();
-                return true; // Menghentikan event lanjutan
-            case KeyEvent.KEYCODE_BACK:
-                closelocation();
-                return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    private void closelocation() {
-        googleMap.clear();
-        for (LatLng latLng : locations) {
-            googleMap.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_aktif)));
-        }
-
-        LatLng targetLatLng = new LatLng(-8.497857188384717, 114.22558996122491);
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(targetLatLng, 10));
-    }
-
-    private void showLocationInfo() {
-        if (currentLocationIndex < locations.size()) {
-            LatLng currentLocation = locations.get(currentLocationIndex);
-            String locationInfo = "Keterangan Lokasi: " + currentLocation.toString();
-            Toast.makeText(this, locationInfo, Toast.LENGTH_SHORT).show();
-            tts = new TextToSpeech(ctx, status -> {
-                if(status == TextToSpeech.SUCCESS){
-                    tts.setLanguage(new Locale("id", "ID"));
-                    tts.speak("Ini Lokasinya!.", TextToSpeech.QUEUE_FLUSH, null);
-                }
-            });
-        }
-    }
-
-    private enum Direction {
-        UP, DOWN, LEFT, RIGHT
     }
 }
