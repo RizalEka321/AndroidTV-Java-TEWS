@@ -81,7 +81,7 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.getUiSettings().setMapToolbarEnabled(false);
-        googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         // Menambahkan marker untuk setiap lokasi
         for (int i = 0; i < locations.size(); i++) {
@@ -90,7 +90,7 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
             googleMap.addMarker(new MarkerOptions()
                     .position(latLng)
                     .title(locationName)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.tanda_home)));
         }
 
         // Start Kamera

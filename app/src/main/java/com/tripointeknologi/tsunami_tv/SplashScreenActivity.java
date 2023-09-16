@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private static final int waktu_loading = 4000; //4 seconds
+    private static final int waktu_loading = 1000; //4 seconds
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
