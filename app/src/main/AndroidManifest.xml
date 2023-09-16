@@ -46,7 +46,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MapsActivity"
+            android:name=".MarkerActivity"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".SignalActivity"
             android:exported="true"
             android:screenOrientation="landscape" />
 
