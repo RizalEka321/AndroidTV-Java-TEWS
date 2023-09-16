@@ -13,8 +13,8 @@
 
     <application
         android:allowBackup="true"
-        android:banner="@drawable/app_icon_your_company"
-        android:icon="@mipmap/ic_launcher"
+        android:banner="@drawable/icons"
+        android:icon="@mipmap/icons"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Tsunami_tv">
@@ -25,8 +25,8 @@
         <activity
             android:name=".SplashScreenActivity"
             android:exported="true"
-            android:icon="@drawable/app_icon_your_company"
-            android:logo="@drawable/app_icon_your_company"
+            android:icon="@drawable/icons"
+            android:logo="@drawable/icons"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,10 +35,10 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:banner="@drawable/app_icon_your_company"
+            android:banner="@drawable/icons"
             android:exported="true"
-            android:icon="@drawable/app_icon_your_company"
-            android:logo="@drawable/app_icon_your_company"
+            android:icon="@drawable/icons"
+            android:logo="@drawable/icons"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
