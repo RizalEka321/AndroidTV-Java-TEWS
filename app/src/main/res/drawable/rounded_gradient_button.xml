@@ -4,6 +4,6 @@
     <corners android:radius="10dp" /> <!-- Adjust the radius to control the roundness -->
     <gradient
         android:angle="0"
-        android:endColor="#FFFFFF"
-        android:startColor="#FFFF" />
+        android:endColor="#ffffff"
+        android:startColor="#ffffff" />
 </shape>

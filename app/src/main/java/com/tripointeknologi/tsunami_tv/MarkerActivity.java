@@ -55,7 +55,7 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(this, R.layout.item_list, locationNames);
 
         // Set adapter ke ListView
-        ListView locationListView = findViewById(R.id.list_view);
+        ListView locationListView = findViewById(R.id.list_marker);
         locationListView.setAdapter(locationAdapter);
 
         // Set an OnItemClickListener for the ListView
