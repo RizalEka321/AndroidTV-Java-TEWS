@@ -21,8 +21,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="7dp"
             android:background="@drawable/rounded_gradient_button"
-            android:text="@string/button_marker"
-            android:textColor="@color/black" />
+            android:drawableStart="@drawable/marker"
+            android:text="@string/button_marker" />
 
         <Button
             android:id="@+id/button_signal"
@@ -32,8 +32,8 @@
             android:layout_marginTop="7dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/rounded_gradient_button"
-            android:text="@string/button_signal"
-            android:textColor="@color/black" /> <!-- Menambahkan textColor -->
+            android:drawableStart="@drawable/receiver"
+            android:text="@string/button_signal" />
     </LinearLayout>
 
 </RelativeLayout>

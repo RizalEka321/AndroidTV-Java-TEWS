@@ -73,13 +73,6 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_maps);
         mapFragment.getMapAsync(this);
         ctx = this;
-
-        Button b1 = findViewById(R.id.button_back);
-
-        b1.setOnClickListener(v -> {
-            Intent intent = new Intent(MarkerActivity.this, MainActivity.class);
-            startActivity(intent);
-        });
     }
 
     @Override
