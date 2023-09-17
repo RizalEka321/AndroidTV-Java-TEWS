@@ -37,7 +37,7 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_marker);
+        setContentView(R.layout.activity_signal);
 
         // Inisialisasi daftar lokasi
         locations = new ArrayList<>();
@@ -64,7 +64,7 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(this, R.layout.item_list, locationNames);
 
         // Set adapter ke ListView
-        ListView locationListView = findViewById(R.id.list_view);
+        ListView locationListView = findViewById(R.id.list_signal);
         locationListView.setAdapter(locationAdapter);
 
         // Set an OnItemClickListener for the ListView

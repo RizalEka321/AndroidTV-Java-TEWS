@@ -59,7 +59,9 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         }
 
         ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(this, R.layout.item_list, locationNames);
+
         ListView locationListView = findViewById(R.id.list_view);
+
         locationListView.setAdapter(locationAdapter);
 
         locationListView.setOnItemClickListener((parent, view, position, id) -> {
@@ -206,7 +208,7 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
             LatLng latLng = location.getLatLng();
             googleMap.addMarker(new MarkerOptions()
                     .position(latLng)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_aktif)));
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.tanda_home)));
         }
 
         LatLng targetLatLng = new LatLng(-8.497857188384717, 114.22558996122491);
