@@ -6,15 +6,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,12 +37,9 @@ import java.util.List;
 
 public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap googleMap;
-
     private List<LocationData> locationData;
-
     TextToSpeech tts;
     Context ctx;
-
     private int currentLocationIndex = 0;
 
     @Override
@@ -55,26 +54,19 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         locationData.add(new LocationData(new LatLng(-8.747144280259468, 114.44063098689058), "Marker 4", "YourArea", new Date()));
 
         List<String> locationNames = new ArrayList<>();
-        for (LocationData location: locationData){
+        for (LocationData location : locationData) {
             locationNames.add(location.getName());
         }
-        // Buat adapter untuk ListView
-        ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(this, R.layout.item_list, locationNames);
 
-        // Set adapter ke ListView
+        ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(this, R.layout.item_list, locationNames);
         ListView locationListView = findViewById(R.id.list_view);
         locationListView.setAdapter(locationAdapter);
 
-        // Set an OnItemClickListener for the ListView
         locationListView.setOnItemClickListener((parent, view, position, id) -> {
             LocationData selectedLocation = locationData.get(position);
-            String selectedLocationName = selectedLocation.getName();
+            LocationData selectedLocationName = selectedLocation.getAll();
             LatLng selectedLatLng = selectedLocation.getLatLng();
-
-
             moveCameraToMarker(selectedLatLng);
-
-
             showPopupDetailView(selectedLocationName);
         });
 
@@ -96,8 +88,7 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        // Menambahkan marker untuk setiap lokasi
-        for (LocationData location : locationData){
+        for (LocationData location : locationData) {
             LatLng latLng = location.getLatLng();
             String locationName = location.getLocationName();
             googleMap.addMarker(new MarkerOptions()
@@ -107,29 +98,47 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
             );
         }
 
-        // Start Kamera
         LatLng countryLatLng = new LatLng(-8.51811526213963, 114.26465950699851);
         float zoomCountry = 10;
-
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(countryLatLng, zoomCountry));
     }
 
     private void moveCameraToMarker(LatLng latLng) {
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng)
-                .zoom(5) // You can adjust the zoom level as needed
+                .zoom(12) // You can adjust the zoom level as needed
                 .build();
 
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
-    private void showPopupDetailView(String locationName) {
-        Dialog dialog = new Dialog(this);
+    private void showPopupDetailView(LocationData locationData) {
+        Dialog dialog = new Dialog(this, R.style.CustomPopupTheme);
         View view = LayoutInflater.from(this).inflate(R.layout.popup_detail_layout, null);
         dialog.setContentView(view);
 
         TextView detailTextView = dialog.findViewById(R.id.popup_detail_text);
-        detailTextView.setText("Details for " + locationName);
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+            );
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.gravity = Gravity.END;
+            params.dimAmount = 0.0f;
+            window.setAttributes(params);
+        }
+
+        // Build a string with all the location data
+        String locationDetails = "Details:\n";
+        locationDetails += "Name: " + locationData.getName() + "\n";
+        locationDetails += "Location Name: " + locationData.getLocationName() + "\n";
+        locationDetails += "Latitude: " + locationData.getLatLng().latitude + "\n";
+        locationDetails += "Longitude: " + locationData.getLatLng().longitude + "\n";
+        locationDetails += "Date: " + locationData.getDate().toString();
+
+        detailTextView.setText(locationDetails);
 
         Button closeButton = view.findViewById(R.id.close_button);
         closeButton.setOnClickListener(v -> {
@@ -139,29 +148,25 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         dialog.show();
     }
 
+
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        Log.d("TES",String.valueOf(keyCode));
+        Log.d("TES", String.valueOf(keyCode));
         switch (keyCode) {
             case 19:
-                // Tombol panah atas pada remote ditekan
                 moveCamera(Direction.UP);
-                return true; // Menghentikan event lanjutan
+                return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
-                // Tombol panah bawah pada remote ditekan
                 moveCamera(Direction.DOWN);
-                return true; // Menghentikan event lanjutan
+                return true;
             case KeyEvent.KEYCODE_DPAD_LEFT:
-                // Tombol panah kiri pada remote ditekan
                 moveCamera(Direction.LEFT);
-                return true; // Menghentikan event lanjutan
+                return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
-                // Tombol panah kanan pada remote ditekan
                 moveCamera(Direction.RIGHT);
-                return true; // Menghentikan event lanjutan
+                return true;
             case KeyEvent.KEYCODE_DPAD_CENTER:
-                // Tombol "OK" pada remote ditekan
-                return true; // Menghentikan event lanjutan
+                return true;
             case KeyEvent.KEYCODE_BACK:
                 closelocation();
                 return true;
@@ -202,7 +207,7 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         }
     }
 
-    private void closelocation(){
+    private void closelocation() {
         googleMap.clear();
         for (LocationData location : locationData) {
             LatLng latLng = location.getLatLng();
@@ -212,16 +217,14 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         }
 
         LatLng targetLatLng = new LatLng(-8.497857188384717, 114.22558996122491);
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(targetLatLng,10));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(targetLatLng, 10));
     }
 
     private enum Direction {
         UP, DOWN, LEFT, RIGHT
     }
 
-    private void onClickList(){
-
+    private void onClickList() {
+        // Implement your logic for handling list item clicks
     }
 }
-
-
