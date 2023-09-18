@@ -1,0 +1,12 @@
+<!-- res/drawable/custom_button_background.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Define your button background -->
+    <item android:drawable="@drawable/rounded_gradient_button" />
+
+    <!-- Define the drawableStart (marker) and adjust its position using padding -->
+    <item
+        android:drawable="@drawable/marker"
+        android:gravity="start|center_vertical"
+        android:left="8dp"
+        android:top="8dp"/> <!-- Adjust the left padding as needed -->
+</layer-list>

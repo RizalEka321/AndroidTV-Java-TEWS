@@ -6,26 +6,54 @@
     android:orientation="horizontal"
     tools:context="com.tripointeknologi.tsunami_tv.MarkerActivity">
 
-    <FrameLayout
+    <include layout="@layout/fragment_map" />
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/fragment_map" />
-    </FrameLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded_background_marker"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp">
+            <FrameLayout
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_marker"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
 
-        <ListView
-            android:id="@+id/list_view"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/list_view_background"
-            android:divider="@android:color/darker_gray"
-            android:dividerHeight="5dp"
-            android:listSelector="@drawable/list_selector_background" />
+                <TextView
+                    android:id="@+id/button_marker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/title_signal"
+                    android:text="@string/button_marker"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+                <ListView
+                    android:id="@+id/list_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/list_selector_background"
+                    android:dividerHeight="5dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:listSelector="@color/white"/>
+
+            </FrameLayout>
+
+        </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>
