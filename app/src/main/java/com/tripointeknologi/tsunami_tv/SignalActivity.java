@@ -23,14 +23,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SignalActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap googleMap;
-    private List<LatLng> locations;
-    private List<String> locationNames;
-    private List<String> locationStatus;
-    private int currentLocationIndex = 0;
+    private List<SignalData> signalDataList;
+    private int currentLocationIndex = -1;
 
     TextToSpeech tts;
     Context ctx;
@@ -40,33 +39,22 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signal);
 
-        // Inisialisasi daftar lokasi
-        locations = new ArrayList<>();
-        locations.add(new LatLng(-8.61306544945518, 114.06503372193593));
-        locations.add(new LatLng(-8.59300681908755, 114.2389213385338));
-        locations.add(new LatLng(-8.44626015184728, 114.34441315926983));
-        locations.add(new LatLng(-8.747144280259468, 114.44063098689058));
+        signalDataList = new ArrayList<>();
+        signalDataList.add(new SignalData(new LatLng(-8.61306544945518, 114.06503372193593), "Signal 1", "Aktif", new Date()));
+        signalDataList.add(new SignalData(new LatLng(-8.59300681908755, 114.2389213385338), "Signal 2", "Tidak Aktif", new Date()));
+        signalDataList.add(new SignalData(new LatLng(-8.44626015184728, 114.34441315926983), "Signal 3", "Aktif", new Date()));
+        signalDataList.add(new SignalData(new LatLng(-8.747144280259468, 114.44063098689058), "Signal 4", "Tidak Aktif", new Date()));
 
-        // Inisialisasi daftar nama lokasi
-        locationNames = new ArrayList<>();
-        locationNames.add("Signal 1");
-        locationNames.add("Signal 2");
-        locationNames.add("Signal 3");
-        locationNames.add("Signal 4");
-
-        // Inisialisasi daftar nama lokasi
-        locationStatus = new ArrayList<>();
-        locationStatus.add("Aktif");
-        locationStatus.add("Tidak Aktif");
-        locationStatus.add("Aktif");
-        locationStatus.add("Tidak Aktif");
-
+        List<String> signalDatas = new ArrayList<>();
+        for (SignalData signalData : signalDataList){
+            signalDatas.add(signalData.getAll().toString());
+        }
         // Buat adapter untuk ListView
-        ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(this, R.layout.item_list, R.id.text1, locationNames);
+        ArrayAdapter<SignalData> signalAdapter = new ArrayAdapter<>(this, R.layout.item_list, R.id.text1, signalDataList);
 
         // Set adapter ke ListView
         ListView locationListView = findViewById(R.id.list_signal);
-        locationListView.setAdapter(locationAdapter);
+        locationListView.setAdapter(signalAdapter);
         locationListView.setFocusable(true);
         locationListView.setFocusableInTouchMode(true);
 
@@ -83,25 +71,26 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
                             if (currentLocationIndex > 0) {
                                 currentLocationIndex--;
                                 locationListView.setSelection(currentLocationIndex);
-                                String selectedLocation = locationNames.get(currentLocationIndex);
+                                SignalData selectedSignal = signalDataList.get(currentLocationIndex);
+                                performSelectedListItemAction();
                                 // Lakukan sesuatu dengan item yang dipilih
                                 return true;
                             }
                             break;
                         case KeyEvent.KEYCODE_DPAD_DOWN:
                             // Handle navigasi ke bawah
-                            if (currentLocationIndex < locationNames.size() - 1) {
+                            if (currentLocationIndex < signalDataList.size() - 1) {
                                 currentLocationIndex++;
                                 locationListView.setSelection(currentLocationIndex);
-                                String selectedLocation = locationNames.get(currentLocationIndex);
+                                SignalData selectedSignal = signalDataList.get(currentLocationIndex);
+                                performSelectedListItemAction();
                                 // Lakukan sesuatu dengan item yang dipilih
                                 return true;
                             }
                             break;
                         case KeyEvent.KEYCODE_ENTER:
-                            // Handle ketika tombol "Enter" pada remote ditekan
-                            String selectedLocation = locationNames.get(currentLocationIndex);
-                            Toast.makeText(SignalActivity.this, "Selected location: " + selectedLocation, Toast.LENGTH_SHORT).show();
+                            // Function ketika tombol "Enter" pada remote ditekan
+                            performSelectedListItemAction();
                             // Lakukan sesuatu dengan item yang dipilih
                             return true;
                     }
@@ -123,10 +112,10 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         // Menambahkan marker untuk setiap lokasi
-        for (int i = 0; i < locations.size(); i++) {
-            LatLng latLng = locations.get(i);
-            String locationName = locationNames.get(i);
-            String locationStat = locationStatus.get(i);
+        for (SignalData signalData :signalDataList) {
+            LatLng latLng = signalData.getLatLng();
+            String locationName = signalData.getNames();
+            String locationStat = signalData.getKeterangan();
 
             // Tentukan ikon marker berdasarkan status lokasi
             int markerIconResource = R.drawable.signal_kuning;
@@ -156,51 +145,17 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-            selectPreviousListItem();
-            return true;
-        } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-            selectNextListItem();
-            return true;
-        } else if (keyCode == KeyEvent.KEYCODE_ENTER) {
-            performSelectedListItemAction();
-            return true;
-        }
-
-        return super.onKeyDown(keyCode, event);
-    }
-
-    private void selectPreviousListItem() {
-        ListView locationListView = findViewById(R.id.list_signal);
-        int currentPosition = locationListView.getSelectedItemPosition();
-        if (currentPosition > 0) {
-            locationListView.setSelection(currentPosition - 1);
-        }
-    }
-
-
-    private void selectNextListItem() {
-        ListView locationListView = findViewById(R.id.list_signal);
-        int currentPosition = locationListView.getSelectedItemPosition();
-        int itemCount = locationListView.getCount();
-        if (currentPosition < itemCount - 1) {
-            locationListView.setSelection(currentPosition + 1);
-        }
-    }
-
     private void performSelectedListItemAction() {
         ListView locationListView = findViewById(R.id.list_signal); // Change the ListView ID
         int selectedItemPosition = locationListView.getSelectedItemPosition();
         if (selectedItemPosition != AdapterView.INVALID_POSITION) {
-            LatLng selectedLatlng = locations.get(selectedItemPosition); // Use the LatLng list
+            SignalData selectedSignal = signalDataList.get(selectedItemPosition);
+            LatLng selectedLatlng = selectedSignal.getLatLng(); // Use the LatLng list
             moveCameraToMarker(selectedLatlng);
 
             // Show a toast message or perform any other action as needed
-            String selectedLocationName = locationNames.get(selectedItemPosition);
-            String selectedLocationStatus = locationStatus.get(selectedItemPosition);
+            String selectedLocationName = selectedSignal.getNames();
+            String selectedLocationStatus = selectedSignal.getKeterangan();
             String message = "Location: " + selectedLocationName + "\nStatus: " + selectedLocationStatus;
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }

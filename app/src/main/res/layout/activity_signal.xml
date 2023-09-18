@@ -49,8 +49,7 @@
                     android:background="@drawable/rounded_signal"
                     android:dividerHeight="5dp"
                     android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:clickable="true"/>
+                    android:focusableInTouchMode="true" />
             </FrameLayout>
         </RelativeLayout>
     </RelativeLayout>
