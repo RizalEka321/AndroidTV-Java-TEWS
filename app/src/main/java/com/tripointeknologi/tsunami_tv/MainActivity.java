@@ -59,6 +59,32 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         locations.add(new LatLng(-8.59300681908755, 114.2389213385338));
         locations.add(new LatLng(-8.44626015184728, 114.34441315926983));
         locations.add(new LatLng(-8.747144280259468, 114.44063098689058));
+        locations.add(new LatLng(-8.512682654119923, 113.820399878706));
+        locations.add(new LatLng(-8.545956165457955, 113.91103708082358));
+        locations.add(new LatLng(-8.478727109993299, 113.77096140482367));
+        locations.add(new LatLng(-8.476010536705594, 114.1005512307058));
+        locations.add(new LatLng(-8.481443664080569, 114.06484566623524));
+        locations.add(new LatLng(-8.594842586240576, 114.36078987850192));
+        locations.add(new LatLng(-8.52898024755826, 114.388942342796));
+        locations.add(new LatLng(-8.636255315988258, 114.46172676267832));
+        locations.add(new LatLng(-8.428723454520092, 114.0894495632817));
+        locations.add(new LatLng(-8.263275841182562, 114.33974489526362));
+        locations.add(new LatLng(-8.334943280597523, 114.21406468601312));
+        locations.add(new LatLng(-8.433991331273027, 114.16081036005953));
+        locations.add(new LatLng(-8.487719564540194, 114.01169824738948));
+        locations.add(new LatLng(-8.25378946665479, 114.35252593349247));
+        locations.add(new LatLng(-8.286463795911496, 114.27583970411929));
+        locations.add(new LatLng(-8.409758504267158, 114.02660945865647));
+        locations.add(new LatLng(-8.28540982759017, 114.24601728158528));
+        locations.add(new LatLng(-8.501413796019042, 114.01595859346574));
+        locations.add(new LatLng(-8.343373882890461, 114.19808838822703));
+        locations.add(new LatLng(-8.250627291167588, 114.226845724242));
+        locations.add(new LatLng(-8.404490297733256, 114.02021893954203));
+        locations.add(new LatLng(-8.422896465676269, 113.99268555981146));
+        locations.add(new LatLng(-8.453415222535932, 114.02230419246344));
+        locations.add(new LatLng(-8.512614714018747, 114.24382688250634));
+        locations.add(new LatLng(-8.46440138406977, 114.1969307141407));
+        locations.add(new LatLng(-8.521768458899842, 114.21976174347661));
 
         // Initialize the map
         mapFragment.getMapAsync(this);

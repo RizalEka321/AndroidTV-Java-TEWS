@@ -3,7 +3,6 @@ package com.tripointeknologi.tsunami_tv;
 import android.content.Context;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -69,43 +68,18 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         locationListView.setAdapter(locationAdapter);
 
         // Set an OnItemClickListener for the ListView
-        locationListView.setOnKeyListener(new View.OnKeyListener() {
+        locationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    switch (keyCode) {
-                        case KeyEvent.KEYCODE_DPAD_UP:
-                            // Handle navigasi ke atas
-                            if (currentLocationIndex > 0) {
-                                currentLocationIndex--;
-                                locationListView.setSelection(currentLocationIndex);
-                                String selectedLocation = locationNames.get(currentLocationIndex);
-                                // Lakukan sesuatu dengan item yang dipilih
-                                return true;
-                            }
-                            break;
-                        case KeyEvent.KEYCODE_DPAD_DOWN:
-                            // Handle navigasi ke bawah
-                            if (currentLocationIndex < locationNames.size() - 1) {
-                                currentLocationIndex++;
-                                locationListView.setSelection(currentLocationIndex);
-                                String selectedLocation = locationNames.get(currentLocationIndex);
-                                // Lakukan sesuatu dengan item yang dipilih
-                                return true;
-                            }
-                            break;
-                        case KeyEvent.KEYCODE_ENTER:
-                            // Handle ketika tombol "Enter" pada remote ditekan
-                            String selectedLocation = locationNames.get(currentLocationIndex);
-                            Toast.makeText(SignalActivity.this, "Selected location: " + selectedLocation, Toast.LENGTH_SHORT).show();
-                            // Lakukan sesuatu dengan item yang dipilih
-                            return true;
-                    }
-                }
-                return false;
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Handle item click here
+                String selectedLocation = locationNames.get(position);
+                Toast.makeText(SignalActivity.this, "Selected location: " + selectedLocation, Toast.LENGTH_SHORT).show();
+
+                // Move the camera to the selected marker
+                LatLng selectedLatLng = locations.get(position);
+                moveCameraToMarker(selectedLatLng);
             }
         });
-
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_maps);
         mapFragment.getMapAsync(this);
