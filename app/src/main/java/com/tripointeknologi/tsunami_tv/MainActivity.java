@@ -1,5 +1,7 @@
 package com.tripointeknologi.tsunami_tv;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,6 +41,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private List<LatLng> locations;
     private int currentLocationIndex = 0;
 
+    private Button button;
+    private Button button1;
+    private AnimatorSet floatUpAnimator;
+    private AnimatorSet floatDownAnimator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +63,47 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Initialize the map
         mapFragment.getMapAsync(this);
 
-        Button button = findViewById(R.id.button_marker);
-        Button button1 = findViewById(R.id.button_signal);
+        button = findViewById(R.id.button_marker);
+        button1 = findViewById(R.id.button_signal);
+
+        // Load animators from XML resources
+        floatUpAnimator = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.float_up);
+        floatDownAnimator = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.float_down);
+
+        // Set initial focus on the first button
+        button.requestFocus();
+
+        // Set focus change listeners for the buttons
+        button.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    // Button is focused, start floating animation
+                    floatUpAnimator.setTarget(v);
+                    floatUpAnimator.start();
+                } else {
+                    // Button lost focus, start floating down animation
+                    floatDownAnimator.setTarget(v);
+                    floatDownAnimator.start();
+                }
+            }
+        });
+
+        button1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    // Button is focused, start floating animation
+                    floatUpAnimator.setTarget(v);
+                    floatUpAnimator.start();
+                } else {
+                    // Button lost focus, start floating down animation
+                    floatDownAnimator.setTarget(v);
+                    floatDownAnimator.start();
+                }
+            }
+        });
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,10 +140,58 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(countryLatLng, zoomCountry));
     }
 
-    private void updateCamera() {
-        if (currentLocationIndex < locations.size()) {
-            LatLng nextLocation = locations.get(currentLocationIndex);
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(nextLocation, 12));
+    // Override method onKeyDown untuk mengendalikan pemilihan tombol dengan remote
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+            // Tombol atas ditekan pada remote, pilih tombol sebelumnya
+            selectPreviousButton();
+            return true;
+        } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+            // Tombol bawah ditekan pada remote, pilih tombol berikutnya
+            selectNextButton();
+            return true;
+        } else if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            // Tombol enter ditekan pada remote, lakukan tindakan terhadap tombol yang dipilih
+            performSelectedButtonAction();
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    // Metode untuk memilih tombol sebelumnya
+    private void selectPreviousButton() {
+        if (button.isFocused()) {
+            // Jika button sedang difokuskan, pindahkan fokus ke button1
+            button1.requestFocus();
+        } else if (button1.isFocused()) {
+            // Jika button1 sedang difokuskan, pindahkan fokus kembali ke button
+            button.requestFocus();
+        }
+    }
+
+    // Metode untuk memilih tombol berikutnya
+    private void selectNextButton() {
+        if (button.isFocused()) {
+            // Jika button sedang difokuskan, pindahkan fokus ke button1
+            button1.requestFocus();
+        } else if (button1.isFocused()) {
+            // Jika button1 sedang difokuskan, pindahkan fokus kembali ke button
+            button.requestFocus();
+        }
+    }
+
+    // Metode untuk melaksanakan tindakan terhadap tombol yang dipilih
+    private void performSelectedButtonAction() {
+        if (button.isFocused()) {
+            // Tindakan yang sesuai saat button dipilih
+            Intent intent = new Intent(MainActivity.this, MarkerActivity.class);
+            startActivity(intent);
+        } else if (button1.isFocused()) {
+            // Tindakan yang sesuai saat button1 dipilih
+            Intent intent = new Intent(MainActivity.this, SignalActivity.class);
+            startActivity(intent);
         }
     }
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/animator/float_up.xml -->
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <objectAnimator
+        android:duration="200"
+        android:propertyName="translationY"
+        android:valueTo="-10dp"
+        android:valueType="floatType" />
+</set>
