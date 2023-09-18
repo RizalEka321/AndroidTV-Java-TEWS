@@ -67,6 +67,10 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         // Set adapter ke ListView
         ListView locationListView = findViewById(R.id.list_signal);
         locationListView.setAdapter(locationAdapter);
+        locationListView.setFocusable(true);
+        locationListView.setFocusableInTouchMode(true);
+
+        locationListView.requestFocus();
 
         // Set an OnItemClickListener for the ListView
         locationListView.setOnKeyListener(new View.OnKeyListener() {
@@ -150,5 +154,55 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
                 .build();
 
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+            selectPreviousListItem();
+            return true;
+        } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+            selectNextListItem();
+            return true;
+        } else if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            performSelectedListItemAction();
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void selectPreviousListItem() {
+        ListView locationListView = findViewById(R.id.list_signal);
+        int currentPosition = locationListView.getSelectedItemPosition();
+        if (currentPosition > 0) {
+            locationListView.setSelection(currentPosition - 1);
+        }
+    }
+
+
+    private void selectNextListItem() {
+        ListView locationListView = findViewById(R.id.list_signal);
+        int currentPosition = locationListView.getSelectedItemPosition();
+        int itemCount = locationListView.getCount();
+        if (currentPosition < itemCount - 1) {
+            locationListView.setSelection(currentPosition + 1);
+        }
+    }
+
+    private void performSelectedListItemAction() {
+        ListView locationListView = findViewById(R.id.list_signal); // Change the ListView ID
+        int selectedItemPosition = locationListView.getSelectedItemPosition();
+        if (selectedItemPosition != AdapterView.INVALID_POSITION) {
+            LatLng selectedLatlng = locations.get(selectedItemPosition); // Use the LatLng list
+            moveCameraToMarker(selectedLatlng);
+
+            // Show a toast message or perform any other action as needed
+            String selectedLocationName = locationNames.get(selectedItemPosition);
+            String selectedLocationStatus = locationStatus.get(selectedItemPosition);
+            String message = "Location: " + selectedLocationName + "\nStatus: " + selectedLocationStatus;
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
     }
 }

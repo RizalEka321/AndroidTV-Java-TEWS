@@ -47,7 +47,10 @@
                     android:layout_marginTop="40dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/rounded_signal"
-                    android:dividerHeight="5dp" />
+                    android:dividerHeight="5dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true"/>
             </FrameLayout>
         </RelativeLayout>
     </RelativeLayout>

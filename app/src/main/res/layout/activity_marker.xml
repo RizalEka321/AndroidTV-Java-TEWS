@@ -46,8 +46,11 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="40dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/rounded_marker"
-                    android:dividerHeight="5dp"/>
+                    android:background="@drawable/list_selector_background"
+                    android:dividerHeight="5dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:listSelector="@color/white"/>
 
             </FrameLayout>
 

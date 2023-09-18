@@ -4,6 +4,6 @@
     <objectAnimator
         android:duration="200"
         android:propertyName="translationY"
-        android:valueTo="-10dp"
+        android:valueTo="-3dp"
         android:valueType="floatType" />
 </set>

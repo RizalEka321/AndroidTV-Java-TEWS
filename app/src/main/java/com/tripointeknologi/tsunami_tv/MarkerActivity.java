@@ -63,6 +63,9 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         ListView locationListView = findViewById(R.id.list_view);
 
         locationListView.setAdapter(locationAdapter);
+        locationListView.setFocusable(true);
+        locationListView.setFocusableInTouchMode(true);
+        locationListView.requestFocus();
 
         locationListView.setOnItemClickListener((parent, view, position, id) -> {
             LocationData selectedLocation = locationData.get(position);
@@ -141,5 +144,51 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         });
 
         dialog.show();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+            selectPreviousListItem();
+            return true;
+        } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+            selectNextListItem();
+            return true;
+        } else if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            performSelectedListItemAction();
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void selectPreviousListItem() {
+        ListView locationListView = findViewById(R.id.list_view);
+        int currentPosition = locationListView.getSelectedItemPosition();
+        if (currentPosition > 0) {
+            locationListView.setSelection(currentPosition - 1);
+        }
+    }
+
+
+    private void selectNextListItem() {
+        ListView locationListView = findViewById(R.id.list_view);
+        int currentPosition = locationListView.getSelectedItemPosition();
+        int itemCount = locationListView.getCount();
+        if (currentPosition < itemCount - 1) {
+            locationListView.setSelection(currentPosition + 1);
+        }
+    }
+
+    private void performSelectedListItemAction() {
+        ListView locationListView = findViewById(R.id.list_view);
+        int selectedItemPosition = locationListView.getSelectedItemPosition();
+        if (selectedItemPosition != AdapterView.INVALID_POSITION) {
+            LocationData selectedLocation = locationData.get(selectedItemPosition);
+            LatLng selectedLatlng = selectedLocation.getLatLng();
+            moveCameraToMarker(selectedLatlng);
+
+            showPopupDetailView(selectedLocation);
+        }
     }
 }
