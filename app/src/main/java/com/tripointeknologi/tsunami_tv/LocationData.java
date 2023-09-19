@@ -8,13 +8,13 @@ import java.util.Date;
 public class LocationData {
     private LatLng latLng;
     private String name;
-    private String LocationName;
+    private String alamat;
     private Date date;
 
-    public LocationData(LatLng latLng, String name, String locationName, Date date) {
+    public LocationData(LatLng latLng, String name, String alamat, Date date) {
         this.latLng = latLng;
         this.name = name;
-        this.LocationName = locationName;
+        this.alamat = alamat;
         this.date = date;
     }
 
@@ -30,12 +30,12 @@ public class LocationData {
         return date;
     }
 
-    public String getLocationName() {
-        return LocationName;
+    public String getAlamat() {
+        return alamat;
     }
 
     public LocationData getAll() {
-        return new LocationData(getLatLng(), getName(), getLocationName(), getDate());
+        return new LocationData(getLatLng(), getName(), getAlamat(), getDate());
     }
 
 }

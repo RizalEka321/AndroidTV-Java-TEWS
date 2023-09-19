@@ -5,17 +5,13 @@ import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.speech.tts.TextToSpeech;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,7 +23,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -156,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         for (LatLng latLng : locations) {
             googleMap.addMarker(new MarkerOptions()
                     .position(latLng)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.tanda_home)));
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.signal_biru)));
         }
 
         // Start Kamera

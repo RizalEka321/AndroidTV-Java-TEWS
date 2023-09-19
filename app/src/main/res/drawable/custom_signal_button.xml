@@ -5,7 +5,7 @@
 
     <!-- Define the drawableStart (marker) and adjust its position using padding -->
     <item
-        android:drawable="@drawable/receiver"
+        android:drawable="@drawable/signal_main"
         android:gravity="start|center_vertical"
         android:left="8dp"
         android:top="8dp"/> <!-- Adjust the left padding as needed -->

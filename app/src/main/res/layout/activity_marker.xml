@@ -4,56 +4,69 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context="com.tripointeknologi.tsunami_tv.MarkerActivity">
+    tools:context="com.tripointeknologi.tsunami_tv.SignalActivity">
 
     <include layout="@layout/fragment_map" />
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rounded_background_signal"
+        android:paddingLeft="30dp"
+        android:paddingRight="10dp">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:layout_width="300dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/rounded_background_marker"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:background="@drawable/rounded_signal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
 
-            <FrameLayout
-                android:layout_width="200dp"
+            <TextView
+                android:id="@+id/button_marker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/title_signal"
+                android:text="MARKER"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
+
+            <ListView
+                android:id="@+id/list_marker"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/rounded_marker"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp">
-
-                <TextView
-                    android:id="@+id/button_marker"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/title_signal"
-                    android:text="@string/button_marker"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
-
-                <ListView
-                    android:id="@+id/list_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/list_selector_background"
-                    android:dividerHeight="5dp"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:listSelector="@color/white"/>
-
-            </FrameLayout>
-
-        </RelativeLayout>
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/rounded_signal"
+                android:dividerHeight="8dp" />
+        </FrameLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="5dp">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:elevation="5dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/logo_poliwangi" />
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:elevation="5dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/logo_bnpb_" />
+    </LinearLayout>
 </RelativeLayout>

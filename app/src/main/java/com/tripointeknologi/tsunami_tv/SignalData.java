@@ -7,27 +7,31 @@ import java.util.Date;
 public class SignalData {
     private LatLng latLng;
     private String name;
-    private String keterangan;
+    private String status;
+    private String alamat;
     private Date date;
 
-    public SignalData(LatLng latLng, String name, String keterangan, Date date){
+    public SignalData(LatLng latLng, String name, String status, String alamat, Date date){
         this.latLng = latLng;
         this.name = name;
-        this.keterangan = keterangan;
+        this.status = status;
         this.date = date;
+        this.alamat = alamat;
     }
 
     public LatLng getLatLng() {
         return latLng;
     }
 
-    public String getNames(){
+    public String getName(){
         return name;
     }
 
-    public String getKeterangan() {
-        return keterangan;
+    public String getStatus() {
+        return status;
     }
+
+    public String getAlamat(){ return alamat;}
 
     public Date getDate() {
         return date;
@@ -37,7 +41,8 @@ public class SignalData {
          return "SignalData{" +
                  "latLng=" + latLng +
                  ", name='" + name + '\'' +
-                 ", keterangan='" + keterangan + '\'' +
+                 ", status='" + status + '\'' +
+                 ", alamat="+ alamat+ '\'' +
                  ", date=" + date +
                  '}';
      }
