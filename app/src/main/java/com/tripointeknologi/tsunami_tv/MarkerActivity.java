@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap googleMap;
@@ -39,6 +40,7 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
     TextToSpeech tts;
     Context ctx;
     private int currentLocationIndex = 0;
+    private Dialog popupD;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,10 +48,10 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         setContentView(R.layout.activity_marker);
 
         locationData = new ArrayList<>();
-        locationData.add(new LocationData(new LatLng(-8.61306544945518, 114.06503372193593), "Marker 1", "Dusun Gurit RT001 RW001 Desa Pengatigan",new Date()));
+        locationData.add(new LocationData(new LatLng(-8.61306544945518, 114.06503372193593), "Marker 1", "Dusun Gurit RT001 RW001 Desa Pengatigan", new Date()));
         locationData.add(new LocationData(new LatLng(-8.59300681908755, 114.2389213385338), "Marker 2", "Dusun Gurit RT001 RW001 Desa Pengatigan", new Date()));
-        locationData.add(new LocationData(new LatLng(-8.44626015184728, 114.34441315926983), "Marker 3", "Dusun Gurit RT001 RW001 Desa Pengatigan",new Date()));
-        locationData.add(new LocationData(new LatLng(-8.747144280259468, 114.44063098689058), "Marker 4", "Dusun Gurit RT001 RW001 Desa Pengatigan",new Date()));
+        locationData.add(new LocationData(new LatLng(-8.44626015184728, 114.34441315926983), "Marker 3", "Dusun Gurit RT001 RW001 Desa Pengatigan", new Date()));
+        locationData.add(new LocationData(new LatLng(-8.747144280259468, 114.44063098689058), "Marker 4", "Dusun Gurit RT001 RW001 Desa Pengatigan", new Date()));
         locationData.add(new LocationData(new LatLng(-8.512682654119923, 113.820399878706), "Marker 5", "Alamat Marker 5", new Date()));
         locationData.add(new LocationData(new LatLng(-8.545956165457955, 113.91103708082358), "Marker 6", "Alamat Marker 6", new Date()));
         locationData.add(new LocationData(new LatLng(-8.478727109993299, 113.77096140482367), "Marker 7", "Alamat Marker 7", new Date()));
@@ -77,8 +79,7 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         locationData.add(new LocationData(new LatLng(-8.46440138406977, 114.1969307141407), "Marker 29", "Alamat Marker 29", new Date()));
         locationData.add(new LocationData(new LatLng(-8.521768458899842, 114.21976174347661), "Marker 30", "Alamat Marker 30", new Date()));
 
-
-        List<HashMap<String, String>> locationDatas= new ArrayList<>();
+        List<HashMap<String, String>> locationDatas = new ArrayList<>();
         for (LocationData location : locationData) {
             HashMap<String, String> map = new HashMap<>();
             map.put("name", location.getName());
@@ -107,6 +108,8 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
             moveCameraToMarker(selectedLatLng);
             showPopupDetailView(selectedLocationName);
         });
+
+        popupD = new Dialog(this, R.style.CustomPopupTheme);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_maps);
         mapFragment.getMapAsync(this);
@@ -144,12 +147,11 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     private void showPopupDetailView(LocationData locationData) {
-        Dialog dialog = new Dialog(this, R.style.CustomPopupTheme);
         View view = LayoutInflater.from(this).inflate(R.layout.popup_detail_layout, null);
-        dialog.setContentView(view);
+        popupD.setContentView(view);
 
-        TextView detailTextView = dialog.findViewById(R.id.popup_detail_text);
-        Window window = dialog.getWindow();
+        TextView detailTextView = popupD.findViewById(R.id.popup_detail_text);
+        Window window = popupD.getWindow();
         if (window != null) {
             window.setFlags(
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
@@ -173,10 +175,10 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
 
         Button closeButton = view.findViewById(R.id.close_button);
         closeButton.setOnClickListener(v -> {
-            dialog.dismiss();
+            popupD.dismiss();
         });
 
-        dialog.show();
+        popupD.show();
     }
 
     @Override
@@ -224,4 +226,14 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
             showPopupDetailView(selectedLocation);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if (popupD != null && popupD.isShowing()) {
+            popupD.dismiss();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
 }
