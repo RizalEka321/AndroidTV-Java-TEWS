@@ -11,7 +11,7 @@ public class SignalData {
     private String alamat;
     private Date date;
 
-    public SignalData(LatLng latLng, String name, String status, String alamat, Date date){
+    public SignalData(LatLng latLng, String name, String status, String alamat, Date date) {
         this.latLng = latLng;
         this.name = name;
         this.status = status;
@@ -23,7 +23,7 @@ public class SignalData {
         return latLng;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
@@ -31,19 +31,21 @@ public class SignalData {
         return status;
     }
 
-    public String getAlamat(){ return alamat;}
+    public String getAlamat() {
+        return alamat;
+    }
 
     public Date getDate() {
         return date;
     }
 
-     public String getAll(){
-         return "SignalData{" +
-                 "latLng=" + latLng +
-                 ", name='" + name + '\'' +
-                 ", status='" + status + '\'' +
-                 ", alamat="+ alamat+ '\'' +
-                 ", date=" + date +
-                 '}';
-     }
+    public String getAll() {
+        return "SignalData{" +
+                "latLng=" + latLng +
+                ", name='" + name + '\'' +
+                ", status='" + status + '\'' +
+                ", alamat=" + alamat + '\'' +
+                ", date=" + date +
+                '}';
+    }
 }

@@ -26,8 +26,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private static final long DELAY_MILLIS = 5000;
-
     Context ctx;
 
     TextToSpeech tts;
