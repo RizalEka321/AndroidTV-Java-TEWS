@@ -1,5 +1,6 @@
 package com.tripointeknologi.tsunami_tv;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.leanback.app.RowsSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
@@ -13,7 +14,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 public class SignalFragment extends RowsSupportFragment {
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -34,11 +37,22 @@ public class SignalFragment extends RowsSupportFragment {
         signalData.add(new SignalData(new LatLng(-8.59300681908755, 114.2389213385338), "Signal 2", "Perbaikan", "Dusun Gurit RT001 RW001 Desa Pengatigan", new Date()));
         signalData.add(new SignalData(new LatLng(-8.44626015184728, 114.34441315926983), "Signal 3", "Aktif", "Dusun Gurit RT001 RW001 Desa Pengatigan", new Date()));
 
-        // Tambahkan semua data SignalData ke adapter
+        // Set click listener untuk presenter CardSignal
+        CardSignal cardSignalPresenter = new CardSignal();
+        cardSignalPresenter.setSignalClickListener(new CardSignal.OnSignalClickListener() {
+            @Override
+            public void onSignalClick(SignalData signal) {
+                Intent intent = new Intent(getActivity(), SignalActivity.class);
+                intent.putExtra(SignalActivity.EXTRA_LAT_LNG, signal.getLatLng());
+                startActivity(intent);
+            }
+        });
+
         for (SignalData data : signalData) {
             cardRowAdapter.add(data);
         }
 
         return cardRowAdapter;
     }
+
 }
