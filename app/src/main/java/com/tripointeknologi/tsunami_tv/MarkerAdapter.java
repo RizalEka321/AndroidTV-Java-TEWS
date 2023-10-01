@@ -1,12 +1,14 @@
 package com.tripointeknologi.tsunami_tv;
 
 import android.graphics.Color;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,15 +18,37 @@ public class MarkerAdapter extends RecyclerView.Adapter<MarkerAdapter.MyView> {
     private List<LocationData> locationDataList;
     private boolean isCardVisible;
     private onItemClickListener onItemClickListener;
+    private OnEnterKeyListener onEnterKeyListener;
     private int selectedItemIndex = -1;
 
     public interface onItemClickListener {
         void onItemClick(LocationData locationData);
     }
 
+    public interface OnEnterKeyListener {
+        void onEnterKeyPressed(int position);
+    }
+
+
+    public void setOnEnterKeyListener(OnEnterKeyListener listener) {
+        this.onEnterKeyListener = listener;
+    }
+
+
     public void setSelectedItem(int index) {
         selectedItemIndex = index;
         notifyDataSetChanged();
+    }
+
+    public boolean onKey(View v, int keyCode, KeyEvent keyEvent) {
+        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            int position = (int) v.getTag();
+            if (onEnterKeyListener != null) {
+                onEnterKeyListener.onEnterKeyPressed(position);
+                return true;
+            }
+        }
+        return false;
     }
 
     public class MyView extends RecyclerView.ViewHolder {
@@ -49,6 +73,7 @@ public class MarkerAdapter extends RecyclerView.Adapter<MarkerAdapter.MyView> {
     public MyView onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.custom_markeritem, parent, false);
+
         return new MyView(itemView);
     }
 
@@ -59,16 +84,8 @@ public class MarkerAdapter extends RecyclerView.Adapter<MarkerAdapter.MyView> {
         holder.subtitleView.setText(locationData.getDate().toString());
 
         holder.itemView.setBackgroundColor(position == selectedItemIndex ?
-                ContextCompat.getColor(holder.itemView.getContext(), R.color.selected_background) : Color.TRANSPARENT);
+                ContextCompat.getColor(holder.itemView.getContext(), R.color.selected_background) : Color.rgb(11, 36, 71));
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(locationData);
-                }
-            }
-        });
     }
 
     @Override
