@@ -26,7 +26,7 @@ public class SignalCard extends Presenter {
         BaseCardView cardView = new BaseCardView(mContext);
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
-        cardView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
+        cardView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.fastlane_background));
 
         // Set margin for the card to provide spacing between cards (e.g., 16dp)
         int cardMargin = mContext.getResources().getDimensionPixelSize(R.dimen.card_margin);
@@ -50,6 +50,7 @@ public class SignalCard extends Presenter {
         if (contentTextView != null) {
             contentTextView.setText(signalData.getName());
         }
+        cardView.requestFocus();
     }
 
     @Override
