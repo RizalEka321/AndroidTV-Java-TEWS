@@ -15,6 +15,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -82,7 +83,7 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.getUiSettings().setMapToolbarEnabled(false);
-        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_map));
 
         for (SignalData signalData : signalData) {
             LatLng latLng = signalData.getLatLng();
@@ -117,7 +118,7 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         // Atur kamera untuk fokus pada lokasi yang diinginkan
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng) // Lokasi yang ingin Anda fokuskan
-                .zoom(12) // Tingkat zoom
+                .zoom(15) // Tingkat zoom
                 .build();
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }

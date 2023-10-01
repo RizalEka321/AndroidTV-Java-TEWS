@@ -19,6 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.getUiSettings().setMapToolbarEnabled(false);
-        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_map));
 
         // Add markers for each location
         for (LatLng latLng : locations) {

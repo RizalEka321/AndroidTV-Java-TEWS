@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,14 +9,16 @@
     <!-- Fragment untuk Peta -->
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="420dp">
+        android:layout_height="match_parent">
         <include layout="@layout/fragment_map" />
     </FrameLayout>
     <!-- Container untuk SignalFragment -->
     <FrameLayout
-        android:id="@+id/browse_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
         android:paddingStart="5dp"
-        android:paddingEnd="5dp" />
-</LinearLayout>
+        android:paddingEnd="5dp">
+        <include layout="@layout/fragment_signal" />
+    </FrameLayout>
+</RelativeLayout>
