@@ -1,30 +1,38 @@
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    card_view:cardUseCompatPadding="true"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="2dp">
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.leanback.widget.BaseCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="200dp"
+    android:layout_height="50dp"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="8dp">
 
+        <!-- ImageView to display an image -->
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/ic_launcher_foreground" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="Image"
+            android:src="@drawable/signal" />
 
+        <!-- TextView to display text -->
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/contentTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Judul Kartu"
-            android:textSize="16sp" />
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/imageView"
+            android:text="Placeholder Text"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/black" />
+
+    </RelativeLayout>
+
+</androidx.leanback.widget.BaseCardView>
