@@ -162,11 +162,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     // Override method onKeyDown untuk mengendalikan pemilihan tombol dengan remote
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
             // Tombol atas ditekan pada remote, pilih tombol sebelumnya
             selectPreviousButton();
             return true;
-        } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+        } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
             // Tombol bawah ditekan pada remote, pilih tombol berikutnya
             selectNextButton();
             return true;
