@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -99,14 +100,14 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         // Initialize the locationData list with data from source
         locationData = new ArrayList<>(source);
 
-        // Set up the RecyclerView
-        RecyclerViewLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(RecyclerViewLayoutManager);
+        // Set up the RecyclerView with GridLayoutManager
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 1); // Adjust the span count as needed
+        layoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
 
         // Create an adapter and set it on the RecyclerView
         adapter = new MarkerAdapter(source, isCardVisible, this);
-        HorizontalLayout = new LinearLayoutManager(MarkerActivity.this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(HorizontalLayout);
         recyclerView.setAdapter(adapter);
 
         popupD = new Dialog(this, R.style.CustomPopupTheme);
@@ -238,14 +239,13 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
     private void scrollToSelectedPosition(int position) {
         if (recyclerView != null) {
             RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-            if (layoutManager instanceof LinearLayoutManager) {
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
-                linearLayoutManager.scrollToPositionWithOffset(position, 30);
+            if (layoutManager instanceof GridLayoutManager) {
+                GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
+                gridLayoutManager.scrollToPosition(position);
                 adapter.setSelectedItem(position);
             }
         }
     }
-
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
