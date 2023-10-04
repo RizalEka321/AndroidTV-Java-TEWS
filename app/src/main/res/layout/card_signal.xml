@@ -1,38 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.leanback.widget.BaseCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:cardBackgroundColor="@android:color/white"
-    app:cardPreventCornerOverlap="false"
-    app:cardUseCompatPadding="true">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_putih_radius"
+    android:orientation="horizontal">
 
-    <RelativeLayout
+    <!-- ImageView untuk gambar -->
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp">
+        android:orientation="vertical">
 
-        <!-- ImageView to display an image -->
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:contentDescription="Image"
-            android:src="@drawable/signal" />
-
-        <!-- TextView to display text -->
         <TextView
-            android:id="@+id/contentTextView"
-            android:layout_width="wrap_content"
+            android:id="@+id/title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/imageView"
-            android:text="Placeholder Text"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/black" />
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="1"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="1"
+            android:paddingEnd="16dp"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
-</androidx.leanback.widget.BaseCardView>
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="2"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+    </LinearLayout>
+</LinearLayout>
