@@ -1,29 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <Button
-        android:id="@+id/close_button"
+    <TextView
+        android:id="@+id/popup_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:text="Close" />
+        android:text="Signal Details"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="right"/>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/close_button"
-        android:layout_marginTop="16dp">
+    <TextView
+        android:id="@+id/popup_detail_text_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name: "
+        android:textSize="14sp"
+        android:gravity="right"/>
 
-        <TextView
-            android:id="@+id/popup_detail_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:textSize="16sp" />
-    </ScrollView>
-</RelativeLayout>
+    <TextView
+        android:id="@+id/popup_detail_text_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status: "
+        android:textSize="14sp"
+        android:gravity="right"/>
+
+    <TextView
+        android:id="@+id/popup_detail_text_voltase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Voltase: "
+        android:textSize="14sp"
+        android:gravity="right"/>
+
+    <TextView
+        android:id="@+id/popup_detail_text_temperatur"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Temperatur: "
+        android:textSize="14sp"
+        android:gravity="right"/>
+
+    <TextView
+        android:id="@+id/popup_detail_text_tanggal_aktifasi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tanggal Aktifasi: "
+        android:textSize="14sp"
+        android:gravity="right"/>
+
+    <TextView
+        android:id="@+id/popup_detail_text_keterangan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Keterangan: "
+        android:textSize="14sp"
+        android:gravity="right"/>
+</LinearLayout>

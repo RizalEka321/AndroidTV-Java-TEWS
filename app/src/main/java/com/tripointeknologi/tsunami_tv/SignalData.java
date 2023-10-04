@@ -9,14 +9,22 @@ public class SignalData {
     private String name;
     private String status;
     private String alamat;
+    private String voltase;
+    private String temperatur;
+    private String tanggal_aktifasi;
+    private String keterangan;
     private Date date;
 
-    public SignalData(LatLng latLng, String name, String status, String alamat, Date date) {
+    public SignalData(LatLng latLng, String name, String status, String alamat,String voltase, String temperatur, String tanggal_aktifasi, String keterangan, Date date) {
         this.latLng = latLng;
         this.name = name;
         this.status = status;
         this.date = date;
         this.alamat = alamat;
+        this.voltase = voltase;
+        this.temperatur = temperatur;
+        this.tanggal_aktifasi = tanggal_aktifasi;
+        this.keterangan = keterangan;
     }
 
     public LatLng getLatLng() {
@@ -33,6 +41,22 @@ public class SignalData {
 
     public String getAlamat() {
         return alamat;
+    }
+
+    public String getVoltase() {
+        return voltase;
+    }
+
+    public String getTemperatur() {
+        return temperatur;
+    }
+
+    public String getTanggal_aktifasi() {
+        return tanggal_aktifasi;
+    }
+
+    public String getKeterangan() {
+        return keterangan;
     }
 
     public Date getDate() {
