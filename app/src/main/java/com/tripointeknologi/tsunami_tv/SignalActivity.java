@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.leanback.app.RowsSupportFragment;
@@ -19,6 +20,7 @@ import androidx.leanback.widget.OnItemViewClickedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,6 +30,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -162,6 +165,12 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
                 currentLocationIndex++;
                 LatLng targetLatLng = signalData.get(currentLocationIndex).getLatLng();
                 moveCamera(targetLatLng);
+            }
+        } else if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+            if (currentLocationIndex >= 0 && currentLocationIndex < signalData.size()) {
+                SignalData signal = signalData.get(currentLocationIndex);
+                detail(signal);
+                return true;
             }
         }
         return super.onKeyDown(keyCode, event);

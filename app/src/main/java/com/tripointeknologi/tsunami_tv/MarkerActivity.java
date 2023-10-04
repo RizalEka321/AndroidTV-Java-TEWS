@@ -20,10 +20,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.leanback.app.RowsSupportFragment;
+import androidx.leanback.widget.ArrayObjectAdapter;
+import androidx.leanback.widget.ListRow;
+import androidx.leanback.widget.ListRowPresenter;
+import androidx.leanback.widget.OnItemViewClickedListener;
+import androidx.leanback.widget.Presenter;
+import androidx.leanback.widget.Row;
+import androidx.leanback.widget.RowPresenter;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,20 +43,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallback, MarkerAdapter.onItemClickListener {
+public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap googleMap;
     private List<LocationData> locationData;
-    TextToSpeech tts;
     Context ctx;
-    private int currentLocationIndex = -1;
+    private int currentLocationIndex = 0;
     private Dialog popupD;
-    private RecyclerView recyclerView;
     private ArrayList<LocationData> source;
-    private RecyclerView.LayoutManager RecyclerViewLayoutManager;
-    private MarkerAdapter adapter;
-    private LinearLayoutManager HorizontalLayout;
-    private View ChildView;
-    private int RecyclerViewItemPosition;
+    private ArrayObjectAdapter rowsAdapter;
+    private RowsSupportFragment rowsFragment;
     private boolean isCardVisible = false;
 
     @Override
@@ -60,8 +59,6 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_marker);
 
-        // Initialize RecyclerView
-        recyclerView = findViewById(R.id.recycler_list);
 
         source = new ArrayList<>();
         source.add(new LocationData(new LatLng(-8.61306544945518, 114.06503372193593), "Marker 1", "Dusun Gurit RT001 RW001 Desa Pengatigan", new Date()));
@@ -96,33 +93,59 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         source.add(new LocationData(new LatLng(-8.46440138406977, 114.1969307141407), "Signal 29", "Alamat Signal 29", new Date()));
         source.add(new LocationData(new LatLng(-8.521768458899842, 114.21976174347661), "Signal 30", "Alamat Signal 30", new Date()));
 
-
         // Initialize the locationData list with data from source
         locationData = new ArrayList<>(source);
-
-        // Set up the RecyclerView with GridLayoutManager
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 1); // Adjust the span count as needed
-        layoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-
-        // Create an adapter and set it on the RecyclerView
-        adapter = new MarkerAdapter(source, isCardVisible, this);
-        recyclerView.setAdapter(adapter);
 
         popupD = new Dialog(this, R.style.CustomPopupTheme);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_maps);
         mapFragment.getMapAsync(this);
         ctx = this;
+    }
 
-        adapter.setOnEnterKeyListener(new MarkerAdapter.OnEnterKeyListener() {
+    private void loadRows() {
+        rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+        MarkerCardPresenter cardPresenter = new MarkerCardPresenter();
+        ArrayObjectAdapter cardRowAdapter = new ArrayObjectAdapter(cardPresenter);
+        for (LocationData location : locationData) {
+            cardRowAdapter.add(location);
+        }
+        ListRow row = new ListRow(cardRowAdapter);
+        rowsAdapter.add(row);
+        rowsFragment = (RowsSupportFragment) getSupportFragmentManager().findFragmentById(R.id.rows_fragment);
+        rowsFragment.setAdapter(rowsAdapter);
+
+        rowsFragment.setOnItemViewClickedListener(new OnItemViewClickedListener() {
             @Override
-            public void onEnterKeyPressed(int position) {
-                LocationData locationData = source.get(position);
-                showPopupDetailView(locationData);
+            public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
+                if (item instanceof LocationData) {
+                    LocationData location = (LocationData) item;
+                    currentLocationIndex = rowViewHolder.get();
+                    LatLng locationData = location.getLatLng();
+                    moveCameraToMarker(locationData);
+                    showPopupDetailView(location);
+
+                }
             }
         });
+    }
+
+    private void showcard() {
+        loadRows();
+        rowsFragment.getView().setVisibility(View.VISIBLE);
+    }
+
+    private void hidecard() {
+        rowsFragment.getView().setVisibility(View.INVISIBLE);
+    }
+
+    private void toggleCardVisibility(){
+        isCardVisible = !isCardVisible;
+        if (isCardVisible) {
+            showcard();
+        } else {
+            hidecard();
+        }
     }
 
 
@@ -196,55 +219,23 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-            isCardVisible = !isCardVisible;
-            adapter.setCardVisibility(isCardVisible);
-
-            if (isCardVisible) {
-                recyclerView.setVisibility(View.VISIBLE); // Show the RecyclerView
-            } else {
-                recyclerView.setVisibility(View.GONE); // Hide the RecyclerView
-            }
+            toggleCardVisibility();
             return true;
         } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
             if (currentLocationIndex > 0) { // Ensure index is within bounds
                 currentLocationIndex--;
                 moveCameraToMarker(locationData.get(currentLocationIndex).getLatLng());
-                Log.d("MyApp", "Moved left to index " + currentLocationIndex);
-                scrollToSelectedPosition(currentLocationIndex);
-                Toast toast = Toast.makeText(this, "Koordinat : " + locationData.get(currentLocationIndex).getLatLng(), Toast.LENGTH_SHORT);
-
-                toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
-
-                toast.show();
             }
             return true; // Return true to indicate that the key press was handled
         } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
             if (currentLocationIndex < locationData.size() - 1) { // Ensure index is within bounds
                 currentLocationIndex++;
                 moveCameraToMarker(locationData.get(currentLocationIndex).getLatLng());
-                Log.d("MyApp", "Moved right to index " + currentLocationIndex);
-                scrollToSelectedPosition(currentLocationIndex);
-                Toast toast = Toast.makeText(this, "Koordinat : " + locationData.get(currentLocationIndex).getLatLng(), Toast.LENGTH_SHORT);
-
-                toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
-
-                toast.show();
             }
             return true; // Return true to indicate that the key press was handled
         }
 
         return super.onKeyDown(keyCode, event);
-    }
-
-    private void scrollToSelectedPosition(int position) {
-        if (recyclerView != null) {
-            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-            if (layoutManager instanceof GridLayoutManager) {
-                GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
-                gridLayoutManager.scrollToPosition(position);
-                adapter.setSelectedItem(position);
-            }
-        }
     }
 
     @Override
@@ -268,11 +259,5 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         }
     }
 
-    @Override
-    public void onItemClick(LocationData locationData) {
-        // Implement the behavior you want when an item is clicked.
-        // This method will be called when an item in the RecyclerView is clicked.
-        showPopupDetailView(locationData);
-    }
 
 }
