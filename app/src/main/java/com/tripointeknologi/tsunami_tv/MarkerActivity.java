@@ -120,7 +120,6 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
             public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
                 if (item instanceof LocationData) {
                     LocationData location = (LocationData) item;
-                    currentLocationIndex = rowViewHolder.get();
                     LatLng locationData = location.getLatLng();
                     moveCameraToMarker(locationData);
                     showPopupDetailView(location);
