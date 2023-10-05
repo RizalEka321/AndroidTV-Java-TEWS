@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -59,6 +60,7 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_marker);
 
+        popupD = new Dialog(this, R.style.CustomPopupTheme);
 
         source = new ArrayList<>();
         source.add(new LocationData(new LatLng(-8.61306544945518, 114.06503372193593), "Marker 1", "Dusun Gurit RT001 RW001 Desa Pengatigan", new Date()));
@@ -94,8 +96,6 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         source.add(new LocationData(new LatLng(-8.521768458899842, 114.21976174347661), "Signal 30", "Alamat Signal 30", new Date()));
 
         locationData = new ArrayList<>(source);
-
-        popupD = new Dialog(this, R.style.CustomPopupTheme);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_maps);
         mapFragment.getMapAsync(this);
@@ -134,31 +134,35 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     private void showPopupDetailView(LocationData locationData) {
-        View view = LayoutInflater.from(this).inflate(R.layout.popup_detail_layout, null);
+        View view = LayoutInflater.from(this).inflate(R.layout.detail_marker, null);
         popupD.setContentView(view);
 
-        TextView detailTextView = popupD.findViewById(R.id.popup_detail_text);
+        TextView detailTextView = popupD.findViewById(R.id.popup_title);
+        TextView name = popupD.findViewById(R.id.detail_name);
+        TextView alamat = popupD.findViewById(R.id.detail_alamat);
+        TextView latitude = popupD.findViewById(R.id.detail_latitude);
+        TextView longitude = popupD.findViewById(R.id.detail_longtitude);
+        TextView date = popupD.findViewById(R.id.detail_date);
+
+        String latitudeValue = String.valueOf(locationData.getLatLng().latitude);
+        String longitudeValue = String.valueOf(locationData.getLatLng().longitude);
+
+        detailTextView.setText("Details");
+        name.setText(locationData.getName());
+        alamat.setText(locationData.getAlamat());
+        latitude.setText(latitudeValue);
+        longitude.setText(longitudeValue);
+        date.setText(locationData.getDate().toString());
+
         Window window = popupD.getWindow();
         if (window != null) {
-            window.setFlags(
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-            );
             WindowManager.LayoutParams params = window.getAttributes();
-            params.gravity = Gravity.END;
-            params.dimAmount = 0.0f;
+            params.gravity = Gravity.START | Gravity.TOP;
+            params.width = getResources().getDimensionPixelSize(R.dimen.custom_dialog_width);
             window.setAttributes(params);
+
+            window.setWindowAnimations(R.style.SlideInAnimation);
         }
-
-        // Build a string with all the location data
-        String locationDetails = "Details:\n";
-        locationDetails += "Name: " + locationData.getName() + "\n";
-        locationDetails += "Location Name: " + locationData.getAlamat() + "\n";
-        locationDetails += "Latitude: " + locationData.getLatLng().latitude + "\n";
-        locationDetails += "Longitude: " + locationData.getLatLng().longitude + "\n";
-        locationDetails += "Date: " + locationData.getDate().toString();
-
-        detailTextView.setText(locationDetails);
 
         Button closeButton = view.findViewById(R.id.close_button);
         closeButton.setOnClickListener(v -> {
