@@ -14,4 +14,9 @@
     <transition name="CustomSlideIn">
         <item name="android:windowEnterAnimation">@drawable/slide_in</item>
     </transition>
+
+    <style name="SlideInAnimation">
+        <item name="android:windowEnterAnimation">@animator/slide_in_from_left</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
 </resources>

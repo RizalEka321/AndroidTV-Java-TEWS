@@ -1,29 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical">
+
+<ImageView
+    android:id="@+id/image_above_table"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:paddingTop="20dp"
+    android:src="@drawable/signal_biru" />
+
+<TableLayout
+    android:id="@+id/detail_table"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white">
+    android:background="@drawable/bg_putih_radius"
+    android:padding="16dp">
 
-    <Button
-        android:id="@+id/close_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:text="Close" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/close_button"
-        android:layout_marginTop="16dp">
+    <TableRow>
 
         <TextView
-            android:id="@+id/popup_detail_text"
-            android:layout_width="match_parent"
+            android:id="@+id/popup_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:textSize="16sp" />
-    </ScrollView>
-</RelativeLayout>
+            android:paddingEnd="16dp"
+            android:text="Signal Details"
+            android:textStyle="bold" />
+    </TableRow>
+
+    <!-- Data Rows -->
+    <TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="16dp"
+            android:text="Name:" />
+
+        <TextView
+            android:id="@+id/popup_detail_text_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="16dp"
+            android:text="Status:" />
+
+        <TextView
+            android:id="@+id/popup_detail_text_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="16dp"
+            android:text="Voltase:" />
+
+        <TextView
+            android:id="@+id/popup_detail_text_voltase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="16dp"
+            android:text="Temperatur:" />
+
+        <TextView
+            android:id="@+id/popup_detail_text_temperatur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="16dp"
+            android:text="Tanggal Aktifasi:" />
+
+        <TextView
+            android:id="@+id/popup_detail_text_tanggal_aktifasi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="16dp"
+            android:text="Keterangan:" />
+
+        <TextView
+            android:id="@+id/popup_detail_text_keterangan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </TableRow>
+
+</TableLayout>
+</LinearLayout>
+

@@ -56,7 +56,7 @@ public class SignalCardPresenter extends Presenter {
             imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE); // Center the image inside ImageView
         }
 
-        viewHolder.view.requestFocus();
+//        viewHolder.view.requestFocus();
     }
 
     @Override
