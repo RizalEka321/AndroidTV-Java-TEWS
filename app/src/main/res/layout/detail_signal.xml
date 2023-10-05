@@ -1,65 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical">
+
+<ImageView
+    android:id="@+id/image_above_table"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:paddingTop="20dp"
+    android:src="@drawable/signal_biru" />
+
+<TableLayout
+    android:id="@+id/detail_table"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:background="@drawable/bg_putih_radius"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/popup_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Signal Details"
-        android:textSize="50dp"
-        android:textStyle="bold"
-        android:gravity="right"/>
+    <TableRow>
 
-    <TextView
-        android:id="@+id/popup_detail_text_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Name: "
-        android:textSize="14sp"
-        android:gravity="right"/>
+        <TextView
+            android:id="@+id/popup_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="16dp"
+            android:text="Signal Details"
+            android:textStyle="bold" />
+    </TableRow>
 
-    <TextView
-        android:id="@+id/popup_detail_text_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Status: "
-        android:textSize="14sp"
-        android:gravity="right"/>
+    <!-- Data Rows -->
+    <TableRow>
 
-    <TextView
-        android:id="@+id/popup_detail_text_voltase"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Voltase: "
-        android:textSize="14sp"
-        android:gravity="right"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="16dp"
+            android:text="Name:" />
 
-    <TextView
-        android:id="@+id/popup_detail_text_temperatur"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Temperatur: "
-        android:textSize="14sp"
-        android:gravity="right"/>
+        <TextView
+            android:id="@+id/popup_detail_text_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </TableRow>
 
-    <TextView
-        android:id="@+id/popup_detail_text_tanggal_aktifasi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tanggal Aktifasi: "
-        android:textSize="14sp"
-        android:gravity="right"/>
+    <TableRow>
 
-    <TextView
-        android:id="@+id/popup_detail_text_keterangan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Keterangan: "
-        android:textSize="14sp"
-        android:gravity="right"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="16dp"
+            android:text="Status:" />
+
+        <TextView
+            android:id="@+id/popup_detail_text_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="16dp"
+            android:text="Voltase:" />
+
+        <TextView
+            android:id="@+id/popup_detail_text_voltase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="16dp"
+            android:text="Temperatur:" />
+
+        <TextView
+            android:id="@+id/popup_detail_text_temperatur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="16dp"
+            android:text="Tanggal Aktifasi:" />
+
+        <TextView
+            android:id="@+id/popup_detail_text_tanggal_aktifasi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="16dp"
+            android:text="Keterangan:" />
+
+        <TextView
+            android:id="@+id/popup_detail_text_keterangan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </TableRow>
+
+</TableLayout>
 </LinearLayout>
+

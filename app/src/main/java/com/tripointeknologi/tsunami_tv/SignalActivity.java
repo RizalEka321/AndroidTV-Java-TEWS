@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -37,10 +38,8 @@ import java.util.Date;
 import java.util.List;
 
 public class SignalActivity extends AppCompatActivity implements OnMapReadyCallback {
-
-    Context ctx;
     private Dialog detail;
-    private int currentLocationIndex = 0;
+    private int currentLocationIndex = -1;
     private GoogleMap googleMap;
     private List<SignalData> signalData;
     private ArrayObjectAdapter rowsAdapter;
@@ -107,12 +106,15 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
             public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
                 if (item instanceof SignalData) {
                     SignalData signal = (SignalData) item;
-                    LatLng signalLocation = signal.getLatLng();
-                    moveCamera(signalLocation);
                     detail(signal);
                 }
             }
         });
+        // Tambahkan kode berikut untuk mengatur tinggi rowsFragment
+        ViewGroup.LayoutParams params = rowsFragment.getView().getLayoutParams();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT; // Atur lebar sesuai kebutuhan
+        params.height = 200; // Atur tinggi sesuai kebutuhan (misalnya 400dp)
+        rowsFragment.getView().setLayoutParams(params);
     }
 
     @Override
@@ -206,22 +208,23 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
 
         // Customize the title and content
         title.setText("Signal Details");
-        nama.setText("Name: " + signalData.getName());
-        status.setText("Status: " + signalData.getStatus());
-        voltase.setText("Voltase: " + signalData.getVoltase());
-        temperatur.setText("Temperatur: " + signalData.getTemperatur());
-        tanggal_akktifasi.setText("Tanggal Aktifasi: " + signalData.getTanggal_aktifasi());
-        keterangan.setText("Keterangan: " + signalData.getKeterangan());
+        nama.setText(signalData.getName());
+        status.setText(signalData.getStatus());
+        voltase.setText(signalData.getVoltase());
+        temperatur.setText(signalData.getTemperatur());
+        tanggal_akktifasi.setText(signalData.getTanggal_aktifasi());
+        keterangan.setText(signalData.getKeterangan());
 
         // Customize the dialog appearance
         Window window = detail.getWindow();
         if (window != null) {
             WindowManager.LayoutParams layoutParams = window.getAttributes();
-            layoutParams.gravity = Gravity.START | Gravity.CENTER_VERTICAL; // Position to the left
+            layoutParams.gravity = Gravity.START | Gravity.TOP; // Position to the top left
             layoutParams.width = getResources().getDimensionPixelSize(R.dimen.custom_dialog_width); // Adjust width as needed
             window.setAttributes(layoutParams);
 
             // Add any additional customization here (e.g., background, animations, etc.)
+            window.setWindowAnimations(R.style.SlideInAnimation);
         }
 
         // Show the customized dialog
