@@ -93,7 +93,6 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         source.add(new LocationData(new LatLng(-8.46440138406977, 114.1969307141407), "Signal 29", "Alamat Signal 29", new Date()));
         source.add(new LocationData(new LatLng(-8.521768458899842, 114.21976174347661), "Signal 30", "Alamat Signal 30", new Date()));
 
-        // Initialize the locationData list with data from source
         locationData = new ArrayList<>(source);
 
         popupD = new Dialog(this, R.style.CustomPopupTheme);
@@ -102,52 +101,6 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
         ctx = this;
     }
-
-    private void loadRows() {
-        rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
-        MarkerCardPresenter cardPresenter = new MarkerCardPresenter();
-        ArrayObjectAdapter cardRowAdapter = new ArrayObjectAdapter(cardPresenter);
-        for (LocationData location : locationData) {
-            cardRowAdapter.add(location);
-        }
-        ListRow row = new ListRow(cardRowAdapter);
-        rowsAdapter.add(row);
-        rowsFragment = (RowsSupportFragment) getSupportFragmentManager().findFragmentById(R.id.rows_fragment);
-        rowsFragment.setAdapter(rowsAdapter);
-
-        rowsFragment.setOnItemViewClickedListener(new OnItemViewClickedListener() {
-            @Override
-            public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
-                if (item instanceof LocationData) {
-                    LocationData location = (LocationData) item;
-                    currentLocationIndex = rowViewHolder.get();
-                    LatLng locationData = location.getLatLng();
-                    moveCameraToMarker(locationData);
-                    showPopupDetailView(location);
-
-                }
-            }
-        });
-    }
-
-    private void showcard() {
-        loadRows();
-        rowsFragment.getView().setVisibility(View.VISIBLE);
-    }
-
-    private void hidecard() {
-        rowsFragment.getView().setVisibility(View.INVISIBLE);
-    }
-
-    private void toggleCardVisibility(){
-        isCardVisible = !isCardVisible;
-        if (isCardVisible) {
-            showcard();
-        } else {
-            hidecard();
-        }
-    }
-
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
@@ -220,19 +173,18 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
             toggleCardVisibility();
-            return true;
         } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
-            if (currentLocationIndex > 0) { // Ensure index is within bounds
+            if (currentLocationIndex > 0) {
                 currentLocationIndex--;
-                moveCameraToMarker(locationData.get(currentLocationIndex).getLatLng());
+                LatLng targerLatLng = locationData.get(currentLocationIndex).getLatLng();
+                moveCameraToMarker(targerLatLng);
             }
-            return true; // Return true to indicate that the key press was handled
         } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-            if (currentLocationIndex < locationData.size() - 1) { // Ensure index is within bounds
+            if (currentLocationIndex < locationData.size() - 1) {
                 currentLocationIndex++;
-                moveCameraToMarker(locationData.get(currentLocationIndex).getLatLng());
+                LatLng targerLatLng = locationData.get(currentLocationIndex).getLatLng();
+                moveCameraToMarker(targerLatLng);
             }
-            return true; // Return true to indicate that the key press was handled
         }
 
         return super.onKeyDown(keyCode, event);
@@ -244,7 +196,6 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
             if (currentLocationIndex >= 0 && currentLocationIndex < locationData.size()) {
                 LocationData location = locationData.get(currentLocationIndex);
                 showPopupDetailView(location);
-                return true;
             }
         }
         return super.onKeyUp(keyCode, event);
@@ -259,5 +210,47 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         }
     }
 
+    private void loadRows() {
+        rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+        MarkerCardPresenter cardPresenter = new MarkerCardPresenter();
+        ArrayObjectAdapter cardRowAdapter = new ArrayObjectAdapter(cardPresenter);
+        for (LocationData location : locationData) {
+            cardRowAdapter.add(location);
+        }
+        ListRow row = new ListRow(cardRowAdapter);
+        rowsAdapter.add(row);
+        rowsFragment = (RowsSupportFragment) getSupportFragmentManager().findFragmentById(R.id.rows_fragment);
+        rowsFragment.setAdapter(rowsAdapter);
 
+        rowsFragment.setOnItemViewClickedListener(new OnItemViewClickedListener() {
+            @Override
+            public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
+                if (item instanceof LocationData) {
+                    LocationData location = (LocationData) item;
+                    LatLng locationData = location.getLatLng();
+                    moveCameraToMarker(locationData);
+                    showPopupDetailView(location);
+
+                }
+            }
+        });
+    }
+
+    private void showcard() {
+        loadRows();
+        rowsFragment.getView().setVisibility(View.VISIBLE);
+    }
+
+    private void hidecard() {
+        rowsFragment.getView().setVisibility(View.INVISIBLE);
+    }
+
+    private void toggleCardVisibility() {
+        isCardVisible = !isCardVisible;
+        if (isCardVisible) {
+            showcard();
+        } else {
+            hidecard();
+        }
+    }
 }
