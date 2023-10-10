@@ -3,10 +3,13 @@ package com.tripointeknologi.tsunami_tv;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.telecom.Call;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -15,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +42,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -54,6 +59,9 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
     private ArrayObjectAdapter rowsAdapter;
     private RowsSupportFragment rowsFragment;
     private boolean isCardVisible = false;
+    private Marker cameraMarker = null;
+    private Handler infoWindowHandler = new Handler();
+    private static final int INFO_WINDOW_DUR = 5000;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,6 +116,9 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_map));
 
+        if (cameraMarker != null) {
+            cameraMarker.remove();
+        }
 
         for (LocationData location : locationData) {
             LatLng latLng = location.getLatLng();
@@ -124,13 +135,67 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(countryLatLng, zoomCountry));
     }
 
+    private void moveCameraToMarkerBase(LatLng latLng) {
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(latLng)
+                .zoom(12)
+                .build();
+
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
     private void moveCameraToMarker(LatLng latLng) {
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng)
                 .zoom(12) // You can adjust the zoom level as needed
                 .build();
 
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), new GoogleMap.CancelableCallback() {
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onFinish() {
+                float minDistance = Float.MAX_VALUE;
+                LocationData closestLocation = null;
+
+                for (LocationData location : locationData) {
+                    LatLng markerPosition = location.getLatLng();
+                    float[] distance = new float[1];
+                    Location.distanceBetween(
+                            latLng.latitude, latLng.longitude, markerPosition.latitude, markerPosition.longitude, distance);
+                    if (distance[0] < minDistance && distance[0] < 500) {
+                        minDistance = distance[0];
+                        closestLocation = location;
+                    }
+                }
+                if (closestLocation != null) {
+                    LatLng markerPosition = closestLocation.getLatLng();
+                    if (cameraMarker != null) {
+                        cameraMarker.remove();
+                    }
+
+                    cameraMarker = googleMap.addMarker(new MarkerOptions()
+                            .position(markerPosition)
+                            .title(closestLocation.getName())
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.signal_biru))
+                    );
+                    cameraMarker.setTag(closestLocation);
+                    cameraMarker.showInfoWindow();
+
+                    infoWindowHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (cameraMarker != null) {
+                                cameraMarker.hideInfoWindow();
+                            }
+                        }
+                    }, INFO_WINDOW_DUR);
+                }
+            }
+        });
     }
 
     private void showPopupDetailView(LocationData locationData) {
@@ -148,11 +213,11 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         String longitudeValue = String.valueOf(locationData.getLatLng().longitude);
 
         detailTextView.setText("Details");
-        name.setText(locationData.getName());
-        alamat.setText(locationData.getAlamat());
-        latitude.setText(latitudeValue);
-        longitude.setText(longitudeValue);
-        date.setText(locationData.getDate().toString());
+        name.setText(String.format(": %s", locationData.getName()));
+        alamat.setText(String.format(": %s", locationData.getAlamat()));
+        latitude.setText(String.format(": %s", latitudeValue));
+        longitude.setText(String.format(": %s", longitudeValue));
+        date.setText(String.format(": %s", locationData.getDate().toString()));
 
         Window window = popupD.getWindow();
         if (window != null) {
@@ -160,14 +225,8 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
             params.gravity = Gravity.START | Gravity.TOP;
             params.width = getResources().getDimensionPixelSize(R.dimen.custom_dialog_width);
             window.setAttributes(params);
-
             window.setWindowAnimations(R.style.SlideInAnimation);
         }
-
-        Button closeButton = view.findViewById(R.id.close_button);
-        closeButton.setOnClickListener(v -> {
-            popupD.dismiss();
-        });
 
         popupD.show();
     }
@@ -232,7 +291,7 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
                 if (item instanceof LocationData) {
                     LocationData location = (LocationData) item;
                     LatLng locationData = location.getLatLng();
-                    moveCameraToMarker(locationData);
+                    moveCameraToMarkerBase(locationData);
                     showPopupDetailView(location);
 
                 }
