@@ -36,7 +36,7 @@ android:orientation="vertical">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="16dp"
-            android:text="Name:" />
+            android:text="Name" />
 
         <TextView
             android:id="@+id/popup_detail_text_name"
@@ -50,7 +50,7 @@ android:orientation="vertical">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="16dp"
-            android:text="Status:" />
+            android:text="Status" />
 
         <TextView
             android:id="@+id/popup_detail_text_status"
@@ -64,7 +64,7 @@ android:orientation="vertical">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="16dp"
-            android:text="Voltase:" />
+            android:text="Voltase" />
 
         <TextView
             android:id="@+id/popup_detail_text_voltase"
@@ -78,7 +78,7 @@ android:orientation="vertical">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="16dp"
-            android:text="Temperatur:" />
+            android:text="Temperatur" />
 
         <TextView
             android:id="@+id/popup_detail_text_temperatur"
@@ -92,7 +92,7 @@ android:orientation="vertical">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="16dp"
-            android:text="Tanggal Aktifasi:" />
+            android:text="Tanggal Aktifasi" />
 
         <TextView
             android:id="@+id/popup_detail_text_tanggal_aktifasi"
@@ -106,7 +106,7 @@ android:orientation="vertical">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="16dp"
-            android:text="Keterangan:" />
+            android:text="Keterangan" />
 
         <TextView
             android:id="@+id/popup_detail_text_keterangan"

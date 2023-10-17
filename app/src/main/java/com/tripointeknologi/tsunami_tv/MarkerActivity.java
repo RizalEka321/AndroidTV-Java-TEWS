@@ -217,11 +217,10 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         alamat.setText(String.format(": %s", locationData.getAlamat()));
         latitude.setText(String.format(": %s", latitudeValue));
         longitude.setText(String.format(": %s", longitudeValue));
-        date.setText(String.format(": %s", locationData.getDate().toString()));
+        date.setText(String.format(": %s", locationData.getDate()));
 
         Window window = popupD.getWindow();
         if (window != null) {
-            WindowManager.LayoutParams params = window.getAttributes();
             WindowManager.LayoutParams layoutParams = window.getAttributes();
             layoutParams.gravity = Gravity.START | Gravity.TOP;
             layoutParams.width = getResources().getDimensionPixelSize(R.dimen.custom_dialog_width);

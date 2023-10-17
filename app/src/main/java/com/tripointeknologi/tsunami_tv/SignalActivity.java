@@ -208,12 +208,12 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
 
         // Customize the title and content
         title.setText("Signal Details");
-        nama.setText(signalData.getName());
-        status.setText(signalData.getStatus());
-        voltase.setText(signalData.getVoltase());
-        temperatur.setText(signalData.getTemperatur());
-        tanggal_akktifasi.setText(signalData.getTanggal_aktifasi());
-        keterangan.setText(signalData.getKeterangan());
+        nama.setText(String.format(": %s",signalData.getName()));
+        status.setText(String.format(": %s",signalData.getStatus()));
+        voltase.setText(String.format(": %s",signalData.getVoltase()));
+        temperatur.setText(String.format(": %s",signalData.getTemperatur()));
+        tanggal_akktifasi.setText(String.format(": %s",signalData.getTanggal_aktifasi()));
+        keterangan.setText(String.format(": %s",signalData.getKeterangan()));
 
         // Customize the dialog appearance
         Window window = detail.getWindow();

@@ -2,7 +2,9 @@ package com.tripointeknologi.tsunami_tv;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class LocationData {
@@ -26,16 +28,21 @@ public class LocationData {
         return name;
     }
 
-    public Date getDate() {
-        return date;
+    public String getDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy HH:mm:ss", new Locale("id", "ID"));
+        return dateFormat.format(date);
     }
 
     public String getAlamat() {
         return alamat;
     }
 
-    public LocationData getAll() {
-        return new LocationData(getLatLng(), getName(), getAlamat(), getDate());
+    public String getAll() {
+        return "SignalData{" +
+                "latLng=" + latLng +
+                ", name='" + name + '\'' +
+                ", alamat=" + alamat + '\'' +
+                ", date=" + date +
+                '}';
     }
-
 }
