@@ -227,7 +227,6 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
             layoutParams.x = 10;
             layoutParams.y = 10;
             window.setAttributes(layoutParams);
-
             window.setWindowAnimations(R.style.SlideInAnimation);
         }
 
