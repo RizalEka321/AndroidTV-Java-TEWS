@@ -219,16 +219,16 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         Window window = detail.getWindow();
         if (window != null) {
             WindowManager.LayoutParams layoutParams = window.getAttributes();
-            layoutParams.gravity = Gravity.START | Gravity.TOP; // Position to the top left
-            layoutParams.width = getResources().getDimensionPixelSize(R.dimen.custom_dialog_width); // Adjust width as needed
+            layoutParams.gravity = Gravity.START | Gravity.TOP;
+            layoutParams.width = getResources().getDimensionPixelSize(R.dimen.custom_dialog_width);
+            layoutParams.x = 10;
+            layoutParams.y = 10;
             window.setAttributes(layoutParams);
 
-            // Add any additional customization here (e.g., background, animations, etc.)
             window.setWindowAnimations(R.style.SlideInAnimation);
         }
 
         // Show the customized dialog
         detail.show();
     }
-
 }

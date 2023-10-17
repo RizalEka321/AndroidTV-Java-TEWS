@@ -222,9 +222,13 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         Window window = popupD.getWindow();
         if (window != null) {
             WindowManager.LayoutParams params = window.getAttributes();
-            params.gravity = Gravity.START | Gravity.TOP;
-            params.width = getResources().getDimensionPixelSize(R.dimen.custom_dialog_width);
-            window.setAttributes(params);
+            WindowManager.LayoutParams layoutParams = window.getAttributes();
+            layoutParams.gravity = Gravity.START | Gravity.TOP;
+            layoutParams.width = getResources().getDimensionPixelSize(R.dimen.custom_dialog_width);
+            layoutParams.x = 10;
+            layoutParams.y = 10;
+            window.setAttributes(layoutParams);
+
             window.setWindowAnimations(R.style.SlideInAnimation);
         }
 
