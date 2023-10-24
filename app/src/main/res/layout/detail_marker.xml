@@ -15,7 +15,7 @@
         android:id="@+id/detail_table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_putih_radius"
+        android:background="@drawable/bg_card"
         android:padding="16dp">
 
         <TableRow>

@@ -13,8 +13,8 @@
 
     <application
         android:allowBackup="true"
-        android:banner="@drawable/icons"
-        android:icon="@mipmap/icons"
+        android:banner="@drawable/_icon_launcher_2"
+        android:icon="@drawable/_icon_launcher_2"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Tsunami_tv">
@@ -25,8 +25,8 @@
         <activity
             android:name=".SplashScreenActivity"
             android:exported="true"
-            android:icon="@drawable/icons"
-            android:logo="@drawable/icons"
+            android:icon="@drawable/_icon_launcher_2"
+            android:logo="@drawable/_icon_launcher_2"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,16 +35,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:banner="@drawable/icons"
             android:exported="true"
-            android:icon="@drawable/icons"
-            android:logo="@drawable/icons"
-            android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".MarkerActivity"
             android:exported="true"
