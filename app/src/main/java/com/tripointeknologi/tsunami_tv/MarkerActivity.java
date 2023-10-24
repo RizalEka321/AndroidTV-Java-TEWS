@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -105,7 +106,7 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
 
         locationData = new ArrayList<>(source);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_maps);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map_marker);
         mapFragment.getMapAsync(this);
         ctx = this;
     }
@@ -284,7 +285,7 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         }
         ListRow row = new ListRow(cardRowAdapter);
         rowsAdapter.add(row);
-        rowsFragment = (RowsSupportFragment) getSupportFragmentManager().findFragmentById(R.id.rows_fragment);
+        rowsFragment = (RowsSupportFragment) getSupportFragmentManager().findFragmentById(R.id.rows_fragment_marker);
         rowsFragment.setAdapter(rowsAdapter);
 
         rowsFragment.setOnItemViewClickedListener(new OnItemViewClickedListener() {
@@ -295,10 +296,13 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
                     LatLng locationData = location.getLatLng();
                     moveCameraToMarkerBase(locationData);
                     showPopupDetailView(location);
-
                 }
             }
         });
+        ViewGroup.LayoutParams params = rowsFragment.getView().getLayoutParams();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.height = 200;
+        rowsFragment.getView().setLayoutParams(params);
     }
 
     private void showcard() {

@@ -13,7 +13,7 @@ public class SignalCardPresenter extends Presenter {
     private static final int CARD_WIDTH = 370;
     private static final int CARD_HEIGHT = 140;
     private Context mContext;
-    private int cardMargin = 5; // Atur nilai margin sesuai kebutuhan Anda
+    private int cardMargin = 5;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
@@ -40,7 +40,7 @@ public class SignalCardPresenter extends Presenter {
         statusView.setText(signal.getStatus());
         subtitleView.setText(signal.getAlamat());
 
-        if (imageView != null) { // Mengganti signalImageView menjadi imageView
+        if (imageView != null) {
             String status = signal.getStatus();
             int signalIconResource = R.drawable.signal_biru; // Default icon
 
@@ -53,7 +53,7 @@ public class SignalCardPresenter extends Presenter {
             }
 
             imageView.setImageResource(signalIconResource);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE); // Center the image inside ImageView
+            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         }
 
         viewHolder.view.requestFocus();
@@ -61,6 +61,6 @@ public class SignalCardPresenter extends Presenter {
 
     @Override
     public void onUnbindViewHolder(ViewHolder viewHolder) {
-        // Implement this method if needed
+
     }
 }

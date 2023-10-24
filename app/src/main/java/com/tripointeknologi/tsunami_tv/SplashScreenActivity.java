@@ -7,8 +7,6 @@ import android.os.Handler;
 import android.widget.VideoView;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.tripointeknologi.tsunami_tv.R;
-
 public class SplashScreenActivity extends AppCompatActivity {
 
     private static final int waktu_loading = 4000; // 4 seconds

@@ -5,7 +5,6 @@ import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -26,17 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
-
     Context ctx;
-
-    TextToSpeech tts;
-
     private GoogleMap googleMap;
     private List<LatLng> locations;
-    private int currentLocationIndex = 0;
-
-    private Button button;
     private Button button1;
+    private Button button2;
     private AnimatorSet floatUpAnimator;
     private AnimatorSet floatDownAnimator;
 
@@ -44,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_maps);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map_main);
         ctx = this;
 
         // Initialize the list of locations
@@ -80,61 +73,53 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         locations.add(new LatLng(-8.46440138406977, 114.1969307141407));
         locations.add(new LatLng(-8.521768458899842, 114.21976174347661));
 
-        // Initialize the map
         mapFragment.getMapAsync(this);
 
-        button = findViewById(R.id.button_marker);
-        button1 = findViewById(R.id.button_signal);
+        button1 = findViewById(R.id.button_marker);
+        button2 = findViewById(R.id.button_signal);
 
-        // Load animators from XML resources
         floatUpAnimator = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.float_up);
         floatDownAnimator = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.float_down);
 
-        // Set initial focus on the first button
-        button.requestFocus();
-
-        // Set focus change listeners for the buttons
-        button.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    // Button is focused, start floating animation
-                    floatUpAnimator.setTarget(v);
-                    floatUpAnimator.start();
-                } else {
-                    // Button lost focus, start floating down animation
-                    floatDownAnimator.setTarget(v);
-                    floatDownAnimator.start();
-                }
-            }
-        });
+        button2.requestFocus();
 
         button1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    // Button is focused, start floating animation
                     floatUpAnimator.setTarget(v);
                     floatUpAnimator.start();
                 } else {
-                    // Button lost focus, start floating down animation
                     floatDownAnimator.setTarget(v);
                     floatDownAnimator.start();
                 }
             }
         });
 
-        button.setOnClickListener(new View.OnClickListener() {
+        button2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MarkerActivity.class); // Change to MainActivity
-                startActivity(intent);
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    floatUpAnimator.setTarget(v);
+                    floatUpAnimator.start();
+                } else {
+                    floatDownAnimator.setTarget(v);
+                    floatDownAnimator.start();
+                }
             }
         });
+
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SignalActivity.class); // Change to MainActivity
+                Intent intent = new Intent(MainActivity.this, MarkerActivity.class);
+                startActivity(intent);
+            }
+        });
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SignalActivity.class);
                 startActivity(intent);
             }
         });
@@ -146,33 +131,27 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_map));
 
-        // Add markers for each location
         for (LatLng latLng : locations) {
             googleMap.addMarker(new MarkerOptions()
                     .position(latLng)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.signal_biru)));
         }
 
-        // Start Kamera
         LatLng countryLatLng = new LatLng(-8.51811526213963, 114.26465950699851);
         float zoomCountry = 10;
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(countryLatLng, zoomCountry));
     }
 
-    // Override method onKeyDown untuk mengendalikan pemilihan tombol dengan remote
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-            // Tombol atas ditekan pada remote, pilih tombol sebelumnya
+        if (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
             selectPreviousButton();
             return true;
-        } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-            // Tombol bawah ditekan pada remote, pilih tombol berikutnya
+        } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
             selectNextButton();
             return true;
         } else if (keyCode == KeyEvent.KEYCODE_ENTER) {
-            // Tombol enter ditekan pada remote, lakukan tindakan terhadap tombol yang dipilih
             performSelectedButtonAction();
             return true;
         }
@@ -180,36 +159,27 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return super.onKeyDown(keyCode, event);
     }
 
-    // Metode untuk memilih tombol sebelumnya
     private void selectPreviousButton() {
-        if (button.isFocused()) {
-            // Jika button sedang difokuskan, pindahkan fokus ke button1
+        if (button1.isFocused()) {
+            button2.requestFocus();
+        } else if (button2.isFocused()) {
             button1.requestFocus();
-        } else if (button1.isFocused()) {
-            // Jika button1 sedang difokuskan, pindahkan fokus kembali ke button
-            button.requestFocus();
         }
     }
 
-    // Metode untuk memilih tombol berikutnya
     private void selectNextButton() {
-        if (button.isFocused()) {
-            // Jika button sedang difokuskan, pindahkan fokus ke button1
+        if (button1.isFocused()) {
+            button2.requestFocus();
+        } else if (button2.isFocused()) {
             button1.requestFocus();
-        } else if (button1.isFocused()) {
-            // Jika button1 sedang difokuskan, pindahkan fokus kembali ke button
-            button.requestFocus();
         }
     }
 
-    // Metode untuk melaksanakan tindakan terhadap tombol yang dipilih
     private void performSelectedButtonAction() {
-        if (button.isFocused()) {
-            // Tindakan yang sesuai saat button dipilih
+        if (button1.isFocused()) {
             Intent intent = new Intent(MainActivity.this, MarkerActivity.class);
             startActivity(intent);
-        } else if (button1.isFocused()) {
-            // Tindakan yang sesuai saat button1 dipilih
+        } else if (button2.isFocused()) {
             Intent intent = new Intent(MainActivity.this, SignalActivity.class);
             startActivity(intent);
         }

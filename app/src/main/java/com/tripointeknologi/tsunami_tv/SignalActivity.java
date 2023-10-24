@@ -1,7 +1,6 @@
 package com.tripointeknologi.tsunami_tv;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -86,7 +85,7 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         signalData.add(new SignalData(new LatLng(-8.521768458899842, 114.21976174347661), "Signal 30", "Aktif", "Alamat Signal 30", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
 
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_maps);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map_signal);
         mapFragment.getMapAsync(this);
     }
 
@@ -99,7 +98,7 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         }
         ListRow row = new ListRow(cardRowAdapter);
         rowsAdapter.add(row);
-        rowsFragment = (RowsSupportFragment) getSupportFragmentManager().findFragmentById(R.id.rows_fragment);
+        rowsFragment = (RowsSupportFragment) getSupportFragmentManager().findFragmentById(R.id.rows_fragment_signal);
         rowsFragment.setAdapter(rowsAdapter);
 
         rowsFragment.setOnItemViewClickedListener(new OnItemViewClickedListener() {
@@ -107,14 +106,15 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
             public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
                 if (item instanceof SignalData) {
                     SignalData signal = (SignalData) item;
+                    LatLng SignalData = signal.getLatLng();
+                    moveCamera(SignalData);
                     detail(signal);
                 }
             }
         });
-        // Tambahkan kode berikut untuk mengatur tinggi rowsFragment
         ViewGroup.LayoutParams params = rowsFragment.getView().getLayoutParams();
-        params.width = ViewGroup.LayoutParams.MATCH_PARENT; // Atur lebar sesuai kebutuhan
-        params.height = 200; // Atur tinggi sesuai kebutuhan (misalnya 400dp)
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.height = 200;
         rowsFragment.getView().setLayoutParams(params);
     }
 
@@ -155,6 +155,40 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
+    private void detail(SignalData signalData) {
+        View view = LayoutInflater.from(this).inflate(R.layout.detail_signal, null);
+        detail.setContentView(view);
+
+        TextView title = detail.findViewById(R.id.popup_title);
+        TextView nama = detail.findViewById(R.id.popup_detail_text_name);
+        TextView status = detail.findViewById(R.id.popup_detail_text_status);
+        TextView voltase = detail.findViewById(R.id.popup_detail_text_voltase);
+        TextView temperatur = detail.findViewById(R.id.popup_detail_text_temperatur);
+        TextView tanggal_akktifasi = detail.findViewById(R.id.popup_detail_text_tanggal_aktifasi);
+        TextView keterangan = detail.findViewById(R.id.popup_detail_text_keterangan);
+
+        title.setText("Signal Details");
+        nama.setText(String.format(": %s", signalData.getName()));
+        status.setText(String.format(": %s", signalData.getStatus()));
+        voltase.setText(String.format(": %s", signalData.getVoltase()));
+        temperatur.setText(String.format(": %s", signalData.getTemperatur()));
+        tanggal_akktifasi.setText(String.format(": %s", signalData.getTanggal_aktifasi()));
+        keterangan.setText(String.format(": %s", signalData.getKeterangan()));
+
+        Window window = detail.getWindow();
+        if (window != null) {
+            WindowManager.LayoutParams layoutParams = window.getAttributes();
+            layoutParams.gravity = Gravity.START | Gravity.TOP;
+            layoutParams.width = getResources().getDimensionPixelSize(R.dimen.custom_dialog_width);
+            layoutParams.x = 10;
+            layoutParams.y = 10;
+            window.setAttributes(layoutParams);
+
+            window.setWindowAnimations(R.style.SlideInAnimation);
+        }
+        detail.show();
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
@@ -175,20 +209,19 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         return super.onKeyDown(keyCode, event);
     }
 
-        @Override
-        public boolean onKeyUp(int keyCode, KeyEvent event) {
-            if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
-                if (currentLocationIndex >= 0 && currentLocationIndex < signalData.size()) {
-                    SignalData signal = signalData.get(currentLocationIndex);
-                    detail(signal);
-                }
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+            if (currentLocationIndex >= 0 && currentLocationIndex < signalData.size()) {
+                SignalData signal = signalData.get(currentLocationIndex);
+                detail(signal);
             }
-            return super.onKeyUp(keyCode, event);
         }
+        return super.onKeyUp(keyCode, event);
+    }
 
 
-
-        private void showcard() {
+    private void showcard() {
         loadRows();
         rowsFragment.getView().setVisibility(View.VISIBLE);
     }
@@ -204,45 +237,5 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         } else {
             hidecard();
         }
-    }
-
-    private void detail(SignalData signalData) {
-        // Create and set the custom dialog layout
-        View view = LayoutInflater.from(this).inflate(R.layout.detail_signal, null);
-        detail.setContentView(view);
-
-        // Find views in the custom layout
-        TextView title = detail.findViewById(R.id.popup_title);
-        TextView nama = detail.findViewById(R.id.popup_detail_text_name);
-        TextView status = detail.findViewById(R.id.popup_detail_text_status);
-        TextView voltase = detail.findViewById(R.id.popup_detail_text_voltase);
-        TextView temperatur = detail.findViewById(R.id.popup_detail_text_temperatur);
-        TextView tanggal_akktifasi = detail.findViewById(R.id.popup_detail_text_tanggal_aktifasi);
-        TextView keterangan = detail.findViewById(R.id.popup_detail_text_keterangan);
-
-        // Customize the title and content
-        title.setText("Signal Details");
-        nama.setText(String.format(": %s", signalData.getName()));
-        status.setText(String.format(": %s", signalData.getStatus()));
-        voltase.setText(String.format(": %s", signalData.getVoltase()));
-        temperatur.setText(String.format(": %s", signalData.getTemperatur()));
-        tanggal_akktifasi.setText(String.format(": %s", signalData.getTanggal_aktifasi()));
-        keterangan.setText(String.format(": %s", signalData.getKeterangan()));
-
-        // Customize the dialog appearance
-        Window window = detail.getWindow();
-        if (window != null) {
-            WindowManager.LayoutParams layoutParams = window.getAttributes();
-            layoutParams.gravity = Gravity.START | Gravity.TOP;
-            layoutParams.width = getResources().getDimensionPixelSize(R.dimen.custom_dialog_width);
-            layoutParams.x = 10;
-            layoutParams.y = 10;
-            window.setAttributes(layoutParams);
-
-            window.setWindowAnimations(R.style.SlideInAnimation);
-        }
-
-        // Show the customized dialog
-        detail.show();
     }
 }
