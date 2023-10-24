@@ -37,8 +37,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map_main);
-        ctx = this;
 
         // Initialize the list of locations
         locations = new ArrayList<>();
@@ -73,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         locations.add(new LatLng(-8.46440138406977, 114.1969307141407));
         locations.add(new LatLng(-8.521768458899842, 114.21976174347661));
 
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map_main);
         mapFragment.getMapAsync(this);
 
         button1 = findViewById(R.id.button_marker);
