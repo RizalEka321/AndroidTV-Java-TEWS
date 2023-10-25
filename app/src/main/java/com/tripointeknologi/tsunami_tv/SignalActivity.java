@@ -1,6 +1,7 @@
 package com.tripointeknologi.tsunami_tv;
 
 import android.app.Dialog;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -107,8 +108,7 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
                 if (item instanceof SignalData) {
                     SignalData signal = (SignalData) item;
                     LatLng SignalData = signal.getLatLng();
-                    moveCamera(SignalData);
-                    detail(signal);
+                    moveCameraDetail(SignalData);
                 }
             }
         });
@@ -153,6 +153,36 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
                 .zoom(15)
                 .build();
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
+    private void moveCameraDetail(LatLng latLng) {
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(latLng)
+                .zoom(15)
+                .build();
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), new GoogleMap.CancelableCallback() {
+            @Override
+            public void onFinish() {
+                SignalData matchingSignal = findSignalDataByLatLng(latLng);
+                if (matchingSignal != null) {
+                    detail(matchingSignal);
+                }
+            }
+
+            @Override
+            public void onCancel() {
+                // Handle pemindahan kamera yang dibatalkan (jika diperlukan).
+            }
+        });
+    }
+
+    private SignalData findSignalDataByLatLng(LatLng latLng) {
+        for (SignalData signal : signalData) {
+            if (signal.getLatLng().equals(latLng)) {
+                return signal;
+            }
+        }
+        return null; // SignalData not found
     }
 
     private void detail(SignalData signalData) {
