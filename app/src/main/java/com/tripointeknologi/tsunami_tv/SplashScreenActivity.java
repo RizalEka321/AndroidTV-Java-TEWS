@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 @SuppressLint("CustomSplashScreen")
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private static final int waktu_loading = 4000; // 4 seconds
+    private static final int waktu_loading = 10000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +19,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         VideoView videoView = findViewById(R.id.splash);
-        Uri videoUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.splash);
+        Uri videoUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.splashscreen);
 
         videoView.setVideoURI(videoUri);
         videoView.start();
