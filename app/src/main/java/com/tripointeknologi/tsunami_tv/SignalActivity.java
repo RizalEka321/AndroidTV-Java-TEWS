@@ -1,6 +1,8 @@
 package com.tripointeknologi.tsunami_tv;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -19,9 +21,6 @@ import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.OnItemViewClickedListener;
-import androidx.leanback.widget.Presenter;
-import androidx.leanback.widget.Row;
-import androidx.leanback.widget.RowPresenter;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,18 +37,20 @@ import java.util.Date;
 import java.util.List;
 
 public class SignalActivity extends AppCompatActivity implements OnMapReadyCallback {
-    private Dialog detail;
-    private int currentLocationIndex = -1;
-    private boolean isCardVisible = false;
-    private GoogleMap googleMap;
-    private List<SignalData> signalData;
-    private ArrayObjectAdapter rowsAdapter;
-    private RowsSupportFragment rowsFragment;
+    Context ctx;
+    Dialog detail;
+    int currentLocationIndex = -1;
+    boolean isCardVisible = false;
+    GoogleMap googleMap;
+    List<SignalData> signalData;
+    ArrayObjectAdapter rowsAdapter;
+    RowsSupportFragment rowsFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signal);
+        ctx = this;
 
         detail = new Dialog(this, R.style.CustomPopupTheme);
 
@@ -87,6 +88,7 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map_signal);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
     }
 
@@ -100,22 +102,20 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         ListRow row = new ListRow(cardRowAdapter);
         rowsAdapter.add(row);
         rowsFragment = (RowsSupportFragment) getSupportFragmentManager().findFragmentById(R.id.rows_fragment_signal);
+        assert rowsFragment != null;
         rowsFragment.setAdapter(rowsAdapter);
 
-        rowsFragment.setOnItemViewClickedListener(new OnItemViewClickedListener() {
-            @Override
-            public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
-                if (item instanceof SignalData) {
-                    SignalData signal = (SignalData) item;
-                    LatLng SignalData = signal.getLatLng();
-                    moveCameraDetail(SignalData);
-                }
+        rowsFragment.setOnItemViewClickedListener((OnItemViewClickedListener) (itemViewHolder, item, rowViewHolder, row1) -> {
+            if (item instanceof SignalData) {
+                SignalData signal = (SignalData) item;
+                LatLng SignalData = signal.getLatLng();
+                moveCameraToMarker(SignalData);
             }
         });
-        ViewGroup.LayoutParams params = rowsFragment.getView().getLayoutParams();
+        ViewGroup.LayoutParams params = rowsFragment.requireView().getLayoutParams();
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         params.height = 200;
-        rowsFragment.getView().setLayoutParams(params);
+        rowsFragment.requireView().setLayoutParams(params);
     }
 
     @Override
@@ -155,37 +155,43 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
-    private void moveCameraDetail(LatLng latLng) {
+    private void moveCameraToMarker(LatLng latLng) {
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng)
-                .zoom(15)
+                .zoom(12) // You can adjust the zoom level as needed
                 .build();
+
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), new GoogleMap.CancelableCallback() {
             @Override
-            public void onFinish() {
-                SignalData matchingSignal = findSignalDataByLatLng(latLng);
-                if (matchingSignal != null) {
-                    detail(matchingSignal);
-                }
+            public void onCancel() {
+
             }
 
             @Override
-            public void onCancel() {
-                // Handle pemindahan kamera yang dibatalkan (jika diperlukan).
+            public void onFinish() {
+                float minDistance = Float.MAX_VALUE;
+                SignalData closestLocation = null;
+
+                for (SignalData signal : signalData) {
+                    LatLng markerPosition = signal.getLatLng();
+                    float[] distance = new float[1];
+                    Location.distanceBetween(
+                            latLng.latitude, latLng.longitude, markerPosition.latitude, markerPosition.longitude, distance);
+                    if (distance[0] < minDistance && distance[0] < 500) {
+                        minDistance = distance[0];
+                        closestLocation = signal;
+                    }
+                }
+                if (closestLocation != null) {
+                    detail(closestLocation);
+                }
             }
         });
     }
 
-    private SignalData findSignalDataByLatLng(LatLng latLng) {
-        for (SignalData signal : signalData) {
-            if (signal.getLatLng().equals(latLng)) {
-                return signal;
-            }
-        }
-        return null; // SignalData not found
-    }
-
+    @SuppressLint("SetTextI18n")
     private void detail(SignalData signalData) {
+        @SuppressLint("InflateParams")
         View view = LayoutInflater.from(this).inflate(R.layout.detail_signal, null);
         detail.setContentView(view);
 
@@ -250,14 +256,13 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         return super.onKeyUp(keyCode, event);
     }
 
-
     private void showcard() {
         loadRows();
-        rowsFragment.getView().setVisibility(View.VISIBLE);
+        rowsFragment.requireView().setVisibility(View.VISIBLE);
     }
 
     private void hidecard() {
-        rowsFragment.getView().setVisibility(View.GONE);
+        rowsFragment.requireView().setVisibility(View.GONE);
     }
 
     private void toggleCardVisibility() {

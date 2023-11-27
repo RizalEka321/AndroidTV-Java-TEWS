@@ -12,16 +12,15 @@ public class SignalCardPresenter extends Presenter {
 
     private static final int CARD_WIDTH = 370;
     private static final int CARD_HEIGHT = 140;
-    private Context mContext;
-    private int cardMargin = 5;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
-        mContext = parent.getContext();
+        Context mContext = parent.getContext();
         View view = LayoutInflater.from(mContext).inflate(R.layout.card_signal, parent, false);
 
         view.setFocusable(true);
         ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(CARD_WIDTH, CARD_HEIGHT);
+        int cardMargin = 5;
         layoutParams.setMargins(cardMargin, cardMargin, cardMargin, cardMargin);
         view.setLayoutParams(layoutParams);
         return new ViewHolder(view);
@@ -42,7 +41,7 @@ public class SignalCardPresenter extends Presenter {
 
         if (imageView != null) {
             String status = signal.getStatus();
-            int signalIconResource = R.drawable.signal_biru; // Default icon
+            int signalIconResource; // Default icon
 
             if ("Aktif".equals(status)) {
                 signalIconResource = R.drawable.signal_biru;

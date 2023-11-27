@@ -12,16 +12,15 @@ public class MarkerCardPresenter extends Presenter {
 
     private static final int CARD_WIDTH = 370;
     private static final int CARD_HEIGHT = 140;
-    private Context mContext;
-    private int cardMargin = 5;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
-        mContext = parent.getContext();
+        Context mContext = parent.getContext();
         View view = LayoutInflater.from(mContext).inflate(R.layout.card_marker, parent, false);
 
         view.setFocusable(true);
         ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(CARD_WIDTH, CARD_HEIGHT);
+        int cardMargin = 5;
         layoutParams.setMargins(cardMargin, cardMargin, cardMargin, cardMargin);
         view.setLayoutParams(layoutParams);
         return new ViewHolder(view);
@@ -36,7 +35,7 @@ public class MarkerCardPresenter extends Presenter {
         ImageView imageView = viewHolder.view.findViewById(R.id.image);
 
         titleView.setText(location.getName());
-        subtitleView.setText(location.getDate().toString());
+        subtitleView.setText(location.getDate());
         imageView.setImageResource(R.drawable.signal_biru);
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 

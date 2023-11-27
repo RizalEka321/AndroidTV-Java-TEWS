@@ -5,15 +5,15 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.Date;
 
 public class SignalData {
-    private LatLng latLng;
-    private String name;
-    private String status;
-    private String alamat;
-    private String voltase;
-    private String temperatur;
-    private String tanggal_aktifasi;
-    private String keterangan;
-    private Date date;
+    private final LatLng latLng;
+    private final String name;
+    private final String status;
+    private final String alamat;
+    private final String voltase;
+    private final String temperatur;
+    private final String tanggal_aktifasi;
+    private final String keterangan;
+    private final Date date;
 
     public SignalData(LatLng latLng, String name, String status, String alamat,String voltase, String temperatur, String tanggal_aktifasi, String keterangan, Date date) {
         this.latLng = latLng;

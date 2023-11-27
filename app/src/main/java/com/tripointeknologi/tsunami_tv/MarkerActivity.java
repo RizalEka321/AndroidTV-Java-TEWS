@@ -1,15 +1,13 @@
 package com.tripointeknologi.tsunami_tv;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Canvas;
+
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.speech.tts.TextToSpeech;
-import android.telecom.Call;
-import android.util.Log;
-import android.util.TypedValue;
+
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -17,12 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,9 +24,6 @@ import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.OnItemViewClickedListener;
-import androidx.leanback.widget.Presenter;
-import androidx.leanback.widget.Row;
-import androidx.leanback.widget.RowPresenter;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -51,18 +41,18 @@ import java.util.Date;
 import java.util.List;
 
 public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallback {
-    private GoogleMap googleMap;
-    private List<LocationData> locationData;
+    GoogleMap googleMap;
+    List<LocationData> locationData;
     Context ctx;
-    private int currentLocationIndex = 0;
-    private Dialog popupD;
-    private ArrayList<LocationData> source;
-    private ArrayObjectAdapter rowsAdapter;
-    private RowsSupportFragment rowsFragment;
-    private boolean isCardVisible = false;
-    private Marker cameraMarker = null;
-    private Handler infoWindowHandler = new Handler();
-    private static final int INFO_WINDOW_DUR = 5000;
+    int currentLocationIndex = 0;
+    Dialog popupD;
+    List<LocationData> source;
+    ArrayObjectAdapter rowsAdapter;
+    RowsSupportFragment rowsFragment;
+    boolean isCardVisible = false;
+    Marker cameraMarker = null;
+    Handler infoWindowHandler = new Handler();
+    int INFO_WINDOW_DUR = 5000;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -107,6 +97,7 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         locationData = new ArrayList<>(source);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map_marker);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
         ctx = this;
     }
@@ -183,15 +174,13 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
                             .title(closestLocation.getName())
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.signal_biru))
                     );
+                    assert cameraMarker != null;
                     cameraMarker.setTag(closestLocation);
                     cameraMarker.showInfoWindow();
 
-                    infoWindowHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (cameraMarker != null) {
-                                cameraMarker.hideInfoWindow();
-                            }
+                    infoWindowHandler.postDelayed(() -> {
+                        if (cameraMarker != null) {
+                            cameraMarker.hideInfoWindow();
                         }
                     }, INFO_WINDOW_DUR);
                 }
@@ -199,7 +188,9 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void showPopupDetailView(LocationData locationData) {
+        @SuppressLint("InflateParams")
         View view = LayoutInflater.from(this).inflate(R.layout.detail_marker, null);
         popupD.setContentView(view);
 
@@ -286,32 +277,30 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         ListRow row = new ListRow(cardRowAdapter);
         rowsAdapter.add(row);
         rowsFragment = (RowsSupportFragment) getSupportFragmentManager().findFragmentById(R.id.rows_fragment_marker);
+        assert rowsFragment != null;
         rowsFragment.setAdapter(rowsAdapter);
 
-        rowsFragment.setOnItemViewClickedListener(new OnItemViewClickedListener() {
-            @Override
-            public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
-                if (item instanceof LocationData) {
-                    LocationData location = (LocationData) item;
-                    LatLng locationData = location.getLatLng();
-                    moveCameraToMarkerBase(locationData);
-                    showPopupDetailView(location);
-                }
+        rowsFragment.setOnItemViewClickedListener((OnItemViewClickedListener) (itemViewHolder, item, rowViewHolder, row1) -> {
+            if (item instanceof LocationData) {
+                LocationData location = (LocationData) item;
+                LatLng locationData = location.getLatLng();
+                moveCameraToMarkerBase(locationData);
+                showPopupDetailView(location);
             }
         });
-        ViewGroup.LayoutParams params = rowsFragment.getView().getLayoutParams();
+        ViewGroup.LayoutParams params = rowsFragment.requireView().getLayoutParams();
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         params.height = 200;
-        rowsFragment.getView().setLayoutParams(params);
+        rowsFragment.requireView().setLayoutParams(params);
     }
 
     private void showcard() {
         loadRows();
-        rowsFragment.getView().setVisibility(View.VISIBLE);
+        rowsFragment.requireView().setVisibility(View.VISIBLE);
     }
 
     private void hidecard() {
-        rowsFragment.getView().setVisibility(View.INVISIBLE);
+        rowsFragment.requireView().setVisibility(View.INVISIBLE);
     }
 
     private void toggleCardVisibility() {

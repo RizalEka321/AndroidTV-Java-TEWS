@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -26,17 +25,19 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     Context ctx;
-    private GoogleMap googleMap;
-    private List<LatLng> locations;
-    private Button button1;
-    private Button button2;
-    private AnimatorSet floatUpAnimator;
-    private AnimatorSet floatDownAnimator;
+    GoogleMap googleMap;
+    List<LatLng> locations;
+    Button button1;
+    Button button2;
+    AnimatorSet floatUpAnimator;
+    AnimatorSet floatDownAnimator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ctx = this;
 
         // Initialize the list of locations
         locations = new ArrayList<>();
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         locations.add(new LatLng(-8.521768458899842, 114.21976174347661));
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map_main);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
 
         button1 = findViewById(R.id.button_marker);
@@ -82,45 +84,33 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         button2.requestFocus();
 
-        button1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    floatUpAnimator.setTarget(v);
-                    floatUpAnimator.start();
-                } else {
-                    floatDownAnimator.setTarget(v);
-                    floatDownAnimator.start();
-                }
+        button1.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                floatUpAnimator.setTarget(v);
+                floatUpAnimator.start();
+            } else {
+                floatDownAnimator.setTarget(v);
+                floatDownAnimator.start();
             }
         });
 
-        button2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    floatUpAnimator.setTarget(v);
-                    floatUpAnimator.start();
-                } else {
-                    floatDownAnimator.setTarget(v);
-                    floatDownAnimator.start();
-                }
+        button2.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                floatUpAnimator.setTarget(v);
+                floatUpAnimator.start();
+            } else {
+                floatDownAnimator.setTarget(v);
+                floatDownAnimator.start();
             }
         });
 
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MarkerActivity.class);
-                startActivity(intent);
-            }
+        button1.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, MarkerActivity.class);
+            startActivity(intent);
         });
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SignalActivity.class);
-                startActivity(intent);
-            }
+        button2.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SignalActivity.class);
+            startActivity(intent);
         });
     }
 

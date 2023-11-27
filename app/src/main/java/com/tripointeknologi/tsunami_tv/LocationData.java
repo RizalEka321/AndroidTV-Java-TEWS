@@ -8,10 +8,10 @@ import java.util.Locale;
 
 
 public class LocationData {
-    private LatLng latLng;
-    private String name;
-    private String alamat;
-    private Date date;
+    private final LatLng latLng;
+    private final String name;
+    private final String alamat;
+    private final Date date;
 
     public LocationData(LatLng latLng, String name, String alamat, Date date) {
         this.latLng = latLng;
