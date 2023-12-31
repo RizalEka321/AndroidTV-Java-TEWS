@@ -66,7 +66,6 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         source.add(new LocationData(new LatLng(-8.59300681908755, 114.2389213385338), "EWS 2", "Dusun Gurit RT001 RW001 Desa Pengatigan", new Date()));
         source.add(new LocationData(new LatLng(-8.44626015184728, 114.34441315926983), "EWS 3", "Dusun Gurit RT001 RW001 Desa Pengatigan", new Date()));
         source.add(new LocationData(new LatLng(-8.747144280259468, 114.44063098689058), "EWS 4", "Dusun Gurit RT001 RW001 Desa Pengatigan", new Date()));
-        source.add(new LocationData(new LatLng(-8.747144280259468, 114.44063098689058), "EWS 4", "Dusun Gurit RT001 RW001 Desa Pengatigan", new Date()));
         source.add(new LocationData(new LatLng(-8.512682654119923, 113.820399878706), "EWS 5", "Aktif,Alamat EWS 5", new Date()));
         source.add(new LocationData(new LatLng(-8.545956165457955, 113.91103708082358), "EWS 6", "Alamat EWS 6", new Date()));
         source.add(new LocationData(new LatLng(-8.478727109993299, 113.77096140482367), "EWS 7", "Alamat EWS 7", new Date()));
