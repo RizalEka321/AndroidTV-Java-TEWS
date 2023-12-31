@@ -36,7 +36,7 @@ public class MarkerCardPresenter extends Presenter {
 
         titleView.setText(location.getName());
         subtitleView.setText(location.getDate());
-        imageView.setImageResource(R.drawable.signal_biru);
+        imageView.setImageResource(R.drawable.ews);
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
         viewHolder.view.requestFocus();

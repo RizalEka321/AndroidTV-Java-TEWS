@@ -21,12 +21,14 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     Context ctx;
     GoogleMap googleMap;
     List<LatLng> locations;
+    List<SignalData> signalData;
     Button button1;
     Button button2;
     AnimatorSet floatUpAnimator;
@@ -71,6 +73,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         locations.add(new LatLng(-8.512614714018747, 114.24382688250634));
         locations.add(new LatLng(-8.46440138406977, 114.1969307141407));
         locations.add(new LatLng(-8.521768458899842, 114.21976174347661));
+
+        signalData = new ArrayList<>();
+        signalData.add(new SignalData(new LatLng(-8.450579126087348, 114.32519941751357), "Signal 1", "Aktif", "Alamat Signal 1", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
+        signalData.add(new SignalData(new LatLng(-8.216688925028878, 114.36196532018623), "Signal 2", "Aktif", "Alamat Signal 1", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
+        signalData.add(new SignalData(new LatLng(-8.554158834400729, 114.10914383090599), "Signal 3", "Aktif", "Alamat Signal 1", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
+
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map_main);
         assert mapFragment != null;
@@ -123,7 +131,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         for (LatLng latLng : locations) {
             googleMap.addMarker(new MarkerOptions()
                     .position(latLng)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.signal_biru)));
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ews)));
+        }
+
+        for (SignalData signalData : signalData) {
+            LatLng latLng = signalData.getLatLng();
+            String locationName = signalData.getName();
+            String locationStat = signalData.getStatus();
+
+            int markerIconResource = R.drawable.signal_biru;
+            if (locationStat.equals("Tidak Aktif")) {
+                markerIconResource = R.drawable.signal_merah;
+            }
+
+            googleMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title(locationName)
+                    .icon(BitmapDescriptorFactory.fromResource(markerIconResource)));
         }
 
         LatLng countryLatLng = new LatLng(-8.51811526213963, 114.26465950699851);

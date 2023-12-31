@@ -18,7 +18,7 @@
     <string name="dismiss_error">Dismiss</string>
     <string name="loading">Loading......</string>
     <string name="ini_splash_screen">INI SPLASH SCREEN</string>
-    <string name="button_marker">Marker</string>
-    <string name="button_signal">Signal</string>
+    <string name="button_marker">EWS</string>
+    <string name="button_signal">RPU</string>
     <string name="back">back</string>
 </resources>
