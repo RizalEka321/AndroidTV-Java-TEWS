@@ -33,19 +33,21 @@
 
         <!-- Data Rows -->
         <TableRow>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppinsmedium"
                 android:text="@string/peragkat"
                 android:textColor="@color/white"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/detail_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                />
+                android:fontFamily="@font/poppinsmedium"
+                android:textColor="@color/white" />
         </TableRow>
 
         <TableRow>
@@ -53,16 +55,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppinsmedium"
                 android:text="@string/status"
                 android:textColor="@color/white"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/detail_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                />
+                android:fontFamily="@font/poppinsmedium"
+                android:textColor="@color/white" />
         </TableRow>
 
         <TableRow>
@@ -70,17 +73,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppinsmedium"
                 android:text="@string/voltase"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/detail_voltase"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                />
+                android:fontFamily="@font/poppinsmedium"
+                android:textColor="@color/white" />
         </TableRow>
 
         <TableRow>
@@ -88,16 +91,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppinsmedium"
                 android:text="@string/temperatur"
                 android:textColor="@color/white"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/detail_temperatur"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                />
+                android:fontFamily="@font/poppinsmedium"
+                android:textColor="@color/white" />
         </TableRow>
 
         <TableRow>
@@ -105,17 +109,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppinsmedium"
                 android:paddingEnd="16dp"
                 android:text="@string/tanggal_aktifasi"
                 android:textColor="@color/white"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/detail_tanggal_aktifasi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                />
+                android:fontFamily="@font/poppinsmedium"
+                android:textColor="@color/white" />
         </TableRow>
 
         <TableRow>
@@ -123,16 +128,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppinsmedium"
                 android:text="@string/keterangan"
                 android:textColor="@color/white"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/detail_keterangan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                />
+                android:fontFamily="@font/poppinsmedium"
+                android:textColor="@color/white" />
         </TableRow>
 
     </TableLayout>
