@@ -2,9 +2,9 @@ package com.tripointeknologi.tsunami_tv.Activities;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Button;
 
@@ -19,72 +19,39 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.tripointeknologi.tsunami_tv.Models.M_ews;
 import com.tripointeknologi.tsunami_tv.Models.M_rpu;
 import com.tripointeknologi.tsunami_tv.R;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
-    Context ctx;
     GoogleMap googleMap;
-    List<LatLng> locations;
+    List<M_ews> ews;
     List<M_rpu> rpu;
     Button button1;
     Button button2;
     AnimatorSet floatUpAnimator;
     AnimatorSet floatDownAnimator;
+    private DatabaseReference mDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ctx = this;
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        // Initialize the list of locations
-        locations = new ArrayList<>();
-        locations.add(new LatLng(-8.61306544945518, 114.06503372193593));
-        locations.add(new LatLng(-8.59300681908755, 114.2389213385338));
-        locations.add(new LatLng(-8.44626015184728, 114.34441315926983));
-        locations.add(new LatLng(-8.747144280259468, 114.44063098689058));
-        locations.add(new LatLng(-8.512682654119923, 113.820399878706));
-        locations.add(new LatLng(-8.545956165457955, 113.91103708082358));
-        locations.add(new LatLng(-8.478727109993299, 113.77096140482367));
-        locations.add(new LatLng(-8.476010536705594, 114.1005512307058));
-        locations.add(new LatLng(-8.481443664080569, 114.06484566623524));
-        locations.add(new LatLng(-8.594842586240576, 114.36078987850192));
-        locations.add(new LatLng(-8.52898024755826, 114.388942342796));
-        locations.add(new LatLng(-8.636255315988258, 114.46172676267832));
-        locations.add(new LatLng(-8.428723454520092, 114.0894495632817));
-        locations.add(new LatLng(-8.263275841182562, 114.33974489526362));
-        locations.add(new LatLng(-8.334943280597523, 114.21406468601312));
-        locations.add(new LatLng(-8.433991331273027, 114.16081036005953));
-        locations.add(new LatLng(-8.487719564540194, 114.01169824738948));
-        locations.add(new LatLng(-8.25378946665479, 114.35252593349247));
-        locations.add(new LatLng(-8.286463795911496, 114.27583970411929));
-        locations.add(new LatLng(-8.409758504267158, 114.02660945865647));
-        locations.add(new LatLng(-8.28540982759017, 114.24601728158528));
-        locations.add(new LatLng(-8.501413796019042, 114.01595859346574));
-        locations.add(new LatLng(-8.343373882890461, 114.19808838822703));
-        locations.add(new LatLng(-8.250627291167588, 114.226845724242));
-        locations.add(new LatLng(-8.404490297733256, 114.02021893954203));
-        locations.add(new LatLng(-8.422896465676269, 113.99268555981146));
-        locations.add(new LatLng(-8.453415222535932, 114.02230419246344));
-        locations.add(new LatLng(-8.512614714018747, 114.24382688250634));
-        locations.add(new LatLng(-8.46440138406977, 114.1969307141407));
-        locations.add(new LatLng(-8.521768458899842, 114.21976174347661));
+        getDataEWS();
+        getDataRPU();
 
-        rpu = new ArrayList<>();
-        rpu.add(new M_rpu(new LatLng(-8.450579126087348, 114.32519941751357), "Signal 1", "Aktif", "Alamat Signal 1", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
-        rpu.add(new M_rpu(new LatLng(-8.216688925028878, 114.36196532018623), "Signal 2", "Aktif", "Alamat Signal 1", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
-        rpu.add(new M_rpu(new LatLng(-8.554158834400729, 114.10914383090599), "Signal 3", "Aktif", "Alamat Signal 1", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
-
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map_main);
-        assert mapFragment != null;
-        mapFragment.getMapAsync(this);
 
         button1 = findViewById(R.id.button_marker);
         button2 = findViewById(R.id.button_signal);
@@ -124,25 +91,97 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
+    private void getDataEWS() {
+        DatabaseReference banyuwangiRef = mDatabase.child("banyuwangi");
+        DatabaseReference data = banyuwangiRef.child("status");
+        data.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ews = new ArrayList<>();
+                for (DataSnapshot statusSnapshot : snapshot.getChildren()) {
+                    M_ews location = statusSnapshot.getValue(M_ews.class);
+                    if (location != null) {
+                        ews.add(location);
+                        // Log the retrieved data
+                        Log.d("FirebaseData", "Device ID: " + location.getDevice_id() +
+                                ", Status: " + location.getStatus() +
+                                ", Tanggal: " + location.getTanggal());
+                    }
+                }
+
+                // Load the rows and map after fetching data
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map_main);
+                assert mapFragment != null;
+                mapFragment.getMapAsync(MainActivity.this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle errors here
+                Log.e("FirebaseError", "Error fetching data from Firebase: " + databaseError.getMessage());
+            }
+        });
+    }
+
+    private void getDataRPU() {
+        DatabaseReference banyuwangiRef = mDatabase.child("banyuwangi");
+        DatabaseReference data = banyuwangiRef.child("rpu");
+        data.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                rpu = new ArrayList<>();
+                for (DataSnapshot statusSnapshot : snapshot.getChildren()) {
+                    M_rpu location = statusSnapshot.getValue(M_rpu.class);
+                    if (location != null) {
+                        rpu.add(location);
+                        // Log the retrieved data
+                        Log.d("FirebaseData", "Device ID: " + location.getRpu_id() +
+                                ", Status: " + location.getStatus() +
+                                ", Tanggal: " + location.getTanggal());
+                    }
+                }
+
+                // Load the rows and map after fetching data
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map_main);
+                assert mapFragment != null;
+                mapFragment.getMapAsync(MainActivity.this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle errors here
+                Log.e("FirebaseError", "Error fetching data from Firebase: " + databaseError.getMessage());
+            }
+        });
+    }
+
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_map));
 
-        for (LatLng latLng : locations) {
+        for (M_ews location : ews) {
+            double latitude = Double.parseDouble(location.getLatitude());
+            double longitude = Double.parseDouble(location.getLongitude());
+            LatLng latLng = new LatLng(latitude, longitude);
+            String locationName = location.getStatus();
             googleMap.addMarker(new MarkerOptions()
                     .position(latLng)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ews)));
+                    .title(locationName)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ews))
+            );
         }
 
         for (M_rpu rpu : rpu) {
-            LatLng latLng = rpu.getLatLng();
-            String locationName = rpu.getName();
+            double latitude = Double.parseDouble(rpu.getLatitude());
+            double longitude = Double.parseDouble(rpu.getLongitude());
+            LatLng latLng = new LatLng(latitude, longitude);
+            String locationName = rpu.getRpu_id();
             String locationStat = rpu.getStatus();
 
             int markerIconResource = R.drawable.signal_biru;
-            if (locationStat.equals("Tidak Aktif")) {
+            if (locationStat.equals("Off")) {
                 markerIconResource = R.drawable.signal_merah;
             }
 

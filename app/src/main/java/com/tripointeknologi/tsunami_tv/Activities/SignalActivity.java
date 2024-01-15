@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.leanback.app.RowsSupportFragment;
@@ -31,6 +33,12 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.tripointeknologi.tsunami_tv.Models.M_ews;
 import com.tripointeknologi.tsunami_tv.Models.M_rpu;
 import com.tripointeknologi.tsunami_tv.R;
 import com.tripointeknologi.tsunami_tv.Cards.SignalCardPresenter;
@@ -48,24 +56,52 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
     List<M_rpu> rpu;
     ArrayObjectAdapter rowsAdapter;
     RowsSupportFragment rowsFragment;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signal);
-        ctx = this;
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         detail = new Dialog(this, R.style.CustomPopupTheme);
 
-        rpu = new ArrayList<>();
-        rpu.add(new M_rpu(new LatLng(-8.450579126087348, 114.32519941751357), "Signal 1", "Aktif", "Alamat Signal 1", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
-        rpu.add(new M_rpu(new LatLng(-8.216688925028878, 114.36196532018623), "Signal 2", "Aktif", "Alamat Signal 2", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
-        rpu.add(new M_rpu(new LatLng(-8.554158834400729, 114.10914383090599), "Signal 3", "Aktif", "Alamat Signal 3", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
+        getData();
+    }
 
+    private void getData() {
+        DatabaseReference banyuwangiRef = mDatabase.child("banyuwangi");
+        DatabaseReference data = banyuwangiRef.child("rpu");
+        data.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                rpu = new ArrayList<>();
+                for (DataSnapshot statusSnapshot : snapshot.getChildren()) {
+                    M_rpu location = statusSnapshot.getValue(M_rpu.class);
+                    if (location != null) {
+                        rpu.add(location);
+                        // Log the retrieved data
+                        Log.d("FirebaseData", "Device ID: " + location.getNama() +
+                                ", Status: " + location.getStatus() +
+                                ", Tanggal: " + location.getTanggal() +
+                                ", Latling: " + location.getLatitude());
+                    }
+                }
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map_signal);
-        assert mapFragment != null;
-        mapFragment.getMapAsync(this);
+                // Load the rows and map after fetching data
+                loadRows();
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map_signal);
+                assert mapFragment != null;
+                mapFragment.getMapAsync(SignalActivity.this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle errors here
+                Log.e("FirebaseError", "Error fetching data from Firebase: " + databaseError.getMessage());
+            }
+        });
     }
 
     private void loadRows() {
@@ -84,7 +120,9 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         rowsFragment.setOnItemViewClickedListener((OnItemViewClickedListener) (itemViewHolder, item, rowViewHolder, row1) -> {
             if (item instanceof M_rpu) {
                 M_rpu signal = (M_rpu) item;
-                LatLng SignalData = signal.getLatLng();
+                double latitude = Double.parseDouble(signal.getLatitude());
+                double longitude = Double.parseDouble(signal.getLongitude());
+                LatLng SignalData = new LatLng(latitude, longitude);
                 moveCameraToMarker(SignalData);
             }
         });
@@ -94,6 +132,7 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         rowsFragment.requireView().setLayoutParams(params);
     }
 
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
@@ -101,12 +140,15 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_map));
 
         for (M_rpu rpu : rpu) {
-            LatLng latLng = rpu.getLatLng();
-            String locationName = rpu.getName();
+            double latitude = Double.parseDouble(rpu.getLatitude());
+            double longitude = Double.parseDouble(rpu.getLongitude());
+            LatLng latLng = new LatLng(latitude, longitude);
+
+            String locationName = rpu.getNama();
             String locationStat = rpu.getStatus();
 
             int markerIconResource = R.drawable.signal_biru;
-            if (locationStat.equals("Tidak Aktif")) {
+            if (locationStat.equals("Off")) {
                 markerIconResource = R.drawable.signal_merah;
             }
 
@@ -148,7 +190,9 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
                 M_rpu closestLocation = null;
 
                 for (M_rpu signal : rpu) {
-                    LatLng markerPosition = signal.getLatLng();
+                    double latitude = Double.parseDouble(signal.getLatitude());
+                    double longitude = Double.parseDouble(signal.getLongitude());
+                    LatLng markerPosition = new LatLng(latitude, longitude);
                     float[] distance = new float[1];
                     Location.distanceBetween(
                             latLng.latitude, latLng.longitude, markerPosition.latitude, markerPosition.longitude, distance);
@@ -173,17 +217,13 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
 
         TextView nama = detail.findViewById(R.id.detail_name);
         TextView status = detail.findViewById(R.id.detail_status);
-        TextView voltase = detail.findViewById(R.id.detail_voltase);
-        TextView temperatur = detail.findViewById(R.id.detail_temperatur);
         TextView tanggal_akktifasi = detail.findViewById(R.id.detail_tanggal_aktifasi);
         TextView keterangan = detail.findViewById(R.id.detail_keterangan);
 
-        nama.setText(String.format(": %s", rpu.getName()));
+        nama.setText(String.format(": %s", rpu.getNama()));
         status.setText(String.format(": %s", rpu.getStatus()));
-        voltase.setText(String.format(": %s", rpu.getVoltase()));
-        temperatur.setText(String.format(": %s", rpu.getTemperatur()));
-        tanggal_akktifasi.setText(String.format(": %s", rpu.getTanggal_aktifasi()));
-        keterangan.setText(String.format(": %s", rpu.getKeterangan()));
+        tanggal_akktifasi.setText(String.format(": %s", rpu.getTanggal()));
+        keterangan.setText(String.format(": %s", rpu.getAlamat()));
 
         Window window = detail.getWindow();
         if (window != null) {
@@ -206,18 +246,25 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
             if (currentLocationIndex > 0) {
                 currentLocationIndex--;
-                LatLng targetLatLng = rpu.get(currentLocationIndex).getLatLng();
+                M_rpu currentRpu = rpu.get(currentLocationIndex);
+                double latitude = Double.parseDouble(currentRpu.getLatitude());
+                double longitude = Double.parseDouble(currentRpu.getLongitude());
+                LatLng targetLatLng = new LatLng(latitude, longitude);
                 moveCamera(targetLatLng);
             }
         } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
             if (currentLocationIndex < rpu.size() - 1) {
                 currentLocationIndex++;
-                LatLng targetLatLng = rpu.get(currentLocationIndex).getLatLng();
+                M_rpu currentRpu = rpu.get(currentLocationIndex);
+                double latitude = Double.parseDouble(currentRpu.getLatitude());
+                double longitude = Double.parseDouble(currentRpu.getLongitude());
+                LatLng targetLatLng = new LatLng(latitude, longitude);
                 moveCamera(targetLatLng);
             }
         }
         return super.onKeyDown(keyCode, event);
     }
+
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {

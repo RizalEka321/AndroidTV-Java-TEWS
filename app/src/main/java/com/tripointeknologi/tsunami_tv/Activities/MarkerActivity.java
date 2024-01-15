@@ -83,7 +83,6 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
                         ews.add(location);
                         // Log the retrieved data
                         Log.d("FirebaseData", "Device ID: " + location.getDevice_id() +
-                                ", Mode: " + location.getMode() +
                                 ", Status: " + location.getStatus() +
                                 ", Tanggal: " + location.getTanggal());
                     }
@@ -116,7 +115,9 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         }
 
         for (M_ews location : ews) {
-            LatLng latLng = location.getLatLng();
+            double latitude = Double.parseDouble(location.getLatitude());
+            double longitude = Double.parseDouble(location.getLongitude());
+            LatLng latLng = new LatLng(latitude, longitude);
             String locationName = location.getStatus();
             googleMap.addMarker(new MarkerOptions()
                     .position(latLng)
@@ -149,7 +150,9 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
                 M_ews closestLocation = null;
 
                 for (M_ews location : ews) {
-                    LatLng markerPosition = location.getLatLng();
+                    double latitude = Double.parseDouble(location.getLatitude());
+                    double longitude = Double.parseDouble(location.getLongitude());
+                    LatLng markerPosition = new LatLng(latitude, longitude);
                     float[] distance = new float[1];
                     Location.distanceBetween(
                             latLng.latitude, latLng.longitude, markerPosition.latitude, markerPosition.longitude, distance);
@@ -214,7 +217,9 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
             rowsFragment.setOnItemViewClickedListener((OnItemViewClickedListener) (itemViewHolder, item, rowViewHolder, row1) -> {
                 if (item instanceof M_ews) {
                     M_ews location = (M_ews) item;
-                    LatLng ews = location.getLatLng();
+                    double latitude = Double.parseDouble(location.getLatitude());
+                    double longitude = Double.parseDouble(location.getLongitude());
+                    LatLng ews = new LatLng(latitude, longitude);
                     moveCameraToMarker(ews);
                 }
             });

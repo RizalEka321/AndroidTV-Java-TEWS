@@ -5,71 +5,62 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.Date;
 
 public class M_rpu {
-    private final LatLng latLng;
-    private final String name;
-    private final String status;
-    private final String alamat;
-    private final String voltase;
-    private final String temperatur;
-    private final String tanggal_aktifasi;
-    private final String keterangan;
-    private final Date date;
+    private String nama;
+    private String alamat;
+    private String latitude;
+    private String longitude;
+    private String rpu_id;
+    private String status;
+    private String tanggal;
 
-    public M_rpu(LatLng latLng, String name, String status, String alamat, String voltase, String temperatur, String tanggal_aktifasi, String keterangan, Date date) {
-        this.latLng = latLng;
-        this.name = name;
-        this.status = status;
-        this.date = date;
+    public M_rpu() {
+
+    }
+
+    public M_rpu(String rpu_id, String status, String tanggal, String latitude, String longitude, String nama, String alamat) {
+        this.rpu_id = rpu_id;
+        this.nama = nama;
         this.alamat = alamat;
-        this.voltase = voltase;
-        this.temperatur = temperatur;
-        this.tanggal_aktifasi = tanggal_aktifasi;
-        this.keterangan = keterangan;
+        this.status = status;
+        this.tanggal = tanggal;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
-    public LatLng getLatLng() {
-        return latLng;
+    public String getNama() {
+        return nama;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getStatus() {
-        return status;
+    public String getRpu_id() {
+        return rpu_id;
     }
 
     public String getAlamat() {
         return alamat;
     }
 
-    public String getVoltase() {
-        return voltase;
+    public String getStatus() {
+        return status;
     }
 
-    public String getTemperatur() {
-        return temperatur;
+    public String getTanggal() {
+        return tanggal;
     }
 
-    public String getTanggal_aktifasi() {
-        return tanggal_aktifasi;
+    public String getLatitude() {
+        return latitude;
     }
 
-    public String getKeterangan() {
-        return keterangan;
+    public String getLongitude() {
+        return longitude;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public String getAll() {
-        return "SignalData{" +
-                "latLng=" + latLng +
-                ", name='" + name + '\'' +
+    @Override
+    public String toString() {
+        return "LocationData{" +
+                "rpu_id='" + rpu_id + '\'' +
                 ", status='" + status + '\'' +
-                ", alamat=" + alamat + '\'' +
-                ", date=" + date +
+                ", tanggal='" + tanggal + '\'' +
                 '}';
     }
 }

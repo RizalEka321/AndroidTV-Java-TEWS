@@ -37,17 +37,15 @@ public class SignalCardPresenter extends Presenter {
         TextView statusView = viewHolder.view.findViewById(R.id.status);
         ImageView imageView = viewHolder.view.findViewById(R.id.image);
 
-        titleView.setText(signal.getName());
+        titleView.setText(signal.getRpu_id());
         statusView.setText(signal.getStatus());
 
         if (imageView != null) {
             String status = signal.getStatus();
             int signalIconResource; // Default icon
 
-            if ("Aktif".equals(status)) {
+            if ("On".equals(status)) {
                 signalIconResource = R.drawable.signal_biru;
-            } else if ("Perbaikan".equals(status)) {
-                signalIconResource = R.drawable.signal_kuning;
             } else {
                 signalIconResource = R.drawable.signal_merah;
             }
