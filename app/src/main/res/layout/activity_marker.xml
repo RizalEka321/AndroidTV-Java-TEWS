@@ -1,52 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    tools:context="com.tripointeknologi.tsunami_tv.MarkerActivity">
+    android:orientation="vertical"
+    tools:context="com.tripointeknologi.tsunami_tv.Activities.MarkerActivity">
 
-    <FrameLayout
-        android:id="@+id/map"
+    <!-- Map Fragment -->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_map_marker"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
+    <!-- RowsSupportFragment Container -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/blue">
+
+        <!-- RowsSupportFragment -->
         <fragment
-            android:id="@+id/fragment_map_marker"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:id="@+id/rows_fragment_marker"
+            android:name="androidx.leanback.app.RowsSupportFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"/>
     </FrameLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="5dp">
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:elevation="5dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:src="@drawable/logo_poliwangi" />
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:elevation="5dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="10dp"
-            android:src="@drawable/logo_bnpb_" />
-    </LinearLayout>
-
-    <fragment
-        android:id="@+id/rows_fragment_marker"
-        android:name="androidx.leanback.app.RowsSupportFragment"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_alignParentBottom="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
-</RelativeLayout>
+</LinearLayout>

@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -43,4 +44,5 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.1")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.firebase:firebase-database:20.3.0")
 }

@@ -1,4 +1,4 @@
-package com.tripointeknologi.tsunami_tv;
+package com.tripointeknologi.tsunami_tv.Cards;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,10 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.leanback.widget.Presenter;
 
+import com.tripointeknologi.tsunami_tv.Models.M_ews;
+import com.tripointeknologi.tsunami_tv.R;
+
 public class MarkerCardPresenter extends Presenter {
 
-    private static final int CARD_WIDTH = 370;
-    private static final int CARD_HEIGHT = 140;
+    private static final int CARD_WIDTH = 300;
+    private static final int CARD_HEIGHT = 90;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
@@ -28,18 +31,18 @@ public class MarkerCardPresenter extends Presenter {
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
-        LocationData location = (LocationData) item;
+        M_ews location = (M_ews) item;
 
         TextView titleView = viewHolder.view.findViewById(R.id.title);
         TextView subtitleView = viewHolder.view.findViewById(R.id.subtitle);
         ImageView imageView = viewHolder.view.findViewById(R.id.image);
 
-        titleView.setText(location.getName());
-        subtitleView.setText(location.getDate());
+        titleView.setText(location.getDevice_id());
+        subtitleView.setText(location.getStatus());
         imageView.setImageResource(R.drawable.ews);
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
-        viewHolder.view.requestFocus();
+//        viewHolder.view.requestFocus();
     }
 
     @Override

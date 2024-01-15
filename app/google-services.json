@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "28637803664",
+    "firebase_url": "https://tsunamiapp-4b210-default-rtdb.firebaseio.com",
+    "project_id": "tsunamiapp-4b210",
+    "storage_bucket": "tsunamiapp-4b210.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:28637803664:android:97eea9d5626f6804b8d415",
+        "android_client_info": {
+          "package_name": "com.tripointeknologi.tsunami_tv"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDd-a7Tl90SRhYHWhPHZ-KyMs8BLSMBJCA"
+        },
+        {
+          "current_key": "AIzaSyAJ3knTOJOVOn5-n0gY5SmHbwqJCZ4Wxac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:28637803664:android:c2ee2552c1aa526eb8d415",
+        "android_client_info": {
+          "package_name": "com.tripointeknologi.tsunamiapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDd-a7Tl90SRhYHWhPHZ-KyMs8BLSMBJCA"
+        },
+        {
+          "current_key": "AIzaSyAJ3knTOJOVOn5-n0gY5SmHbwqJCZ4Wxac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

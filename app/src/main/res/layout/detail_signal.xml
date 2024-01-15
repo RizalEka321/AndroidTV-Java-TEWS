@@ -1,119 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:orientation="vertical">
-
-<ImageView
-    android:id="@+id/image_above_table"
-    android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:paddingTop="20dp"
-    android:src="@drawable/signal_biru" />
-
-<TableLayout
-    android:id="@+id/detail_table"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_card"
-    android:padding="16dp">
+    android:background="@color/birumuda"
+    android:orientation="vertical">
 
-    <TableRow>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/birutua">
 
-        <TextView
-            android:id="@+id/popup_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="16dp"
-            android:text="Signal Details"
-            android:textStyle="bold" />
-    </TableRow>
+        <ImageView
+            android:id="@+id/image_signal"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:contentDescription="@string/todo"
+            android:paddingTop="20dp"
+            android:src="@drawable/signal_biru" />
+    </FrameLayout>
 
-    <!-- Data Rows -->
-    <TableRow>
+    <TableLayout
+        android:id="@+id/detail_table"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_card"
+        android:padding="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="16dp"
-            android:text="Name" />
+        <!-- Data Rows -->
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/peragkat"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/popup_detail_text_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </TableRow>
+            <TextView
+                android:id="@+id/detail_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                />
+        </TableRow>
 
-    <TableRow>
+        <TableRow>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="16dp"
-            android:text="Status" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/status"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/popup_detail_text_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </TableRow>
+            <TextView
+                android:id="@+id/detail_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                />
+        </TableRow>
 
-    <TableRow>
+        <TableRow>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="16dp"
-            android:text="Voltase" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/voltase"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                />
 
-        <TextView
-            android:id="@+id/popup_detail_text_voltase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </TableRow>
+            <TextView
+                android:id="@+id/detail_voltase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                />
+        </TableRow>
 
-    <TableRow>
+        <TableRow>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="16dp"
-            android:text="Temperatur" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/temperatur"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/popup_detail_text_temperatur"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </TableRow>
+            <TextView
+                android:id="@+id/detail_temperatur"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                />
+        </TableRow>
 
-    <TableRow>
+        <TableRow>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="16dp"
-            android:text="Tanggal Aktifasi" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="16dp"
+                android:text="@string/tanggal_aktifasi"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/popup_detail_text_tanggal_aktifasi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </TableRow>
+            <TextView
+                android:id="@+id/detail_tanggal_aktifasi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                />
+        </TableRow>
 
-    <TableRow>
+        <TableRow>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="16dp"
-            android:text="Keterangan" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/keterangan"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/popup_detail_text_keterangan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </TableRow>
+            <TextView
+                android:id="@+id/detail_keterangan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                />
+        </TableRow>
 
-</TableLayout>
+    </TableLayout>
 </LinearLayout>
 

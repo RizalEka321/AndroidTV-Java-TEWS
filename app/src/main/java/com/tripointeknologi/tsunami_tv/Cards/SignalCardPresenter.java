@@ -1,4 +1,4 @@
-package com.tripointeknologi.tsunami_tv;
+package com.tripointeknologi.tsunami_tv.Cards;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,10 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.leanback.widget.Presenter;
 
+import com.tripointeknologi.tsunami_tv.Models.M_rpu;
+import com.tripointeknologi.tsunami_tv.R;
+
 public class SignalCardPresenter extends Presenter {
 
-    private static final int CARD_WIDTH = 370;
-    private static final int CARD_HEIGHT = 140;
+    private static final int CARD_WIDTH = 300;
+    private static final int CARD_HEIGHT = 100;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
@@ -28,16 +31,14 @@ public class SignalCardPresenter extends Presenter {
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
-        SignalData signal = (SignalData) item;
+        M_rpu signal = (M_rpu) item;
 
         TextView titleView = viewHolder.view.findViewById(R.id.title);
         TextView statusView = viewHolder.view.findViewById(R.id.status);
-        TextView subtitleView = viewHolder.view.findViewById(R.id.subtitle);
         ImageView imageView = viewHolder.view.findViewById(R.id.image);
 
         titleView.setText(signal.getName());
         statusView.setText(signal.getStatus());
-        subtitleView.setText(signal.getAlamat());
 
         if (imageView != null) {
             String status = signal.getStatus();

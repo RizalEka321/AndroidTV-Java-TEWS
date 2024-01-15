@@ -21,4 +21,17 @@
     <string name="button_marker">EWS</string>
     <string name="button_signal">RPU</string>
     <string name="back">back</string>
+    <string name="title">title</string>
+    <string name="subtitle">subtitle</string>
+    <string name="tanggal">Tanggal</string>
+    <string name="status">Status</string>
+    <string name="device">Device</string>
+    <string name="alamat">Alamat</string>
+    <string name="todo">TODO</string>
+    <string name="lokasi">Lokasi</string>
+    <string name="peragkat">Peragkat</string>
+    <string name="voltase">Voltase</string>
+    <string name="temperatur">Temperatur</string>
+    <string name="tanggal_aktifasi">Tanggal Aktifasi</string>
+    <string name="keterangan">Keterangan</string>
 </resources>

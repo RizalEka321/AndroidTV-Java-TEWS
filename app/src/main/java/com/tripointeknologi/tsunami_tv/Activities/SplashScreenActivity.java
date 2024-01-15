@@ -1,4 +1,4 @@
-package com.tripointeknologi.tsunami_tv;
+package com.tripointeknologi.tsunami_tv.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.VideoView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.tripointeknologi.tsunami_tv.R;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashScreenActivity extends AppCompatActivity {

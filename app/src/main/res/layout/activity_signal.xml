@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context="com.tripointeknologi.tsunami_tv.SignalActivity">
+    tools:context="com.tripointeknologi.tsunami_tv.Activities.SignalActivity">
 
     <FrameLayout
         android:id="@+id/map"
@@ -17,35 +17,23 @@
             android:layout_height="match_parent" />
     </FrameLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="5dp">
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:elevation="5dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:src="@drawable/logo_poliwangi" />
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:elevation="5dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="10dp"
-            android:src="@drawable/logo_bnpb_" />
-    </LinearLayout>
     <!--  Marker Fragment  -->
-    <fragment
-        android:id="@+id/rows_fragment_signal"
-        android:name="androidx.leanback.app.RowsSupportFragment"
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="120dp"
         android:layout_alignParentBottom="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
+        android:layout_centerHorizontal="true">
+
+        <!-- RowsSupportFragment -->
+        <fragment
+            android:id="@+id/rows_fragment_signal"
+            android:name="androidx.leanback.app.RowsSupportFragment"
+            android:layout_margin="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+    </FrameLayout>
 </RelativeLayout>

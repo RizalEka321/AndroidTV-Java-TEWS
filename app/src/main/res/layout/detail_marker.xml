@@ -2,45 +2,50 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/birumuda">
 
-    <ImageView
-        android:id="@+id/image_location"
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:paddingTop="20dp"
-        android:src="@drawable/ews" />
+        android:layout_height="match_parent"
+        android:background="@color/birutua"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp">
+        <ImageView
+            android:id="@+id/image_location"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:paddingTop="20dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ews"
+            android:contentDescription="@string/todo" />
+    </FrameLayout>
 
     <TableLayout
         android:id="@+id/detail_table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_card"
         android:padding="16dp">
 
         <TableRow>
 
             <TextView
-                android:id="@+id/popup_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingEnd="16dp"
-                android:text="Details"
-                android:textStyle="bold" />
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingEnd="16dp"
-                android:text="Name" />
+                android:text="@string/peragkat"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                />
 
             <TextView
                 android:id="@+id/detail_name"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                />
         </TableRow>
 
         <TableRow>
@@ -48,13 +53,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingEnd="16dp"
-                android:text="Alamat" />
+                android:text="@string/status"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                />
 
             <TextView
-                android:id="@+id/detail_alamat"
+                android:id="@+id/detail_status"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                />
         </TableRow>
 
         <TableRow>
@@ -62,41 +71,36 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingEnd="16dp"
-                android:text="Latitude" />
-
-            <TextView
-                android:id="@+id/detail_latitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingEnd="16dp"
-                android:text="Longitude" />
-
-            <TextView
-                android:id="@+id/detail_longtitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingEnd="16dp"
-                android:text="Date" />
+                android:text="@string/tanggal"
+                android:paddingEnd="20dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                />
 
             <TextView
                 android:id="@+id/detail_date"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lokasi"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                />
+
+            <TextView
+                android:id="@+id/detail_alamat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                />
         </TableRow>
     </TableLayout>
 

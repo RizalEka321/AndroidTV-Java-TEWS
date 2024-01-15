@@ -1,10 +1,10 @@
-package com.tripointeknologi.tsunami_tv;
+package com.tripointeknologi.tsunami_tv.Models;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Date;
 
-public class SignalData {
+public class M_rpu {
     private final LatLng latLng;
     private final String name;
     private final String status;
@@ -15,7 +15,7 @@ public class SignalData {
     private final String keterangan;
     private final Date date;
 
-    public SignalData(LatLng latLng, String name, String status, String alamat,String voltase, String temperatur, String tanggal_aktifasi, String keterangan, Date date) {
+    public M_rpu(LatLng latLng, String name, String status, String alamat, String voltase, String temperatur, String tanggal_aktifasi, String keterangan, Date date) {
         this.latLng = latLng;
         this.name = name;
         this.status = status;

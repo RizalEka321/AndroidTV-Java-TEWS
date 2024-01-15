@@ -1,4 +1,4 @@
-package com.tripointeknologi.tsunami_tv;
+package com.tripointeknologi.tsunami_tv.Activities;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
@@ -19,6 +19,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.tripointeknologi.tsunami_tv.Models.M_rpu;
+import com.tripointeknologi.tsunami_tv.R;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     Context ctx;
     GoogleMap googleMap;
     List<LatLng> locations;
-    List<SignalData> signalData;
+    List<M_rpu> rpu;
     Button button1;
     Button button2;
     AnimatorSet floatUpAnimator;
@@ -74,10 +76,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         locations.add(new LatLng(-8.46440138406977, 114.1969307141407));
         locations.add(new LatLng(-8.521768458899842, 114.21976174347661));
 
-        signalData = new ArrayList<>();
-        signalData.add(new SignalData(new LatLng(-8.450579126087348, 114.32519941751357), "Signal 1", "Aktif", "Alamat Signal 1", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
-        signalData.add(new SignalData(new LatLng(-8.216688925028878, 114.36196532018623), "Signal 2", "Aktif", "Alamat Signal 1", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
-        signalData.add(new SignalData(new LatLng(-8.554158834400729, 114.10914383090599), "Signal 3", "Aktif", "Alamat Signal 1", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
+        rpu = new ArrayList<>();
+        rpu.add(new M_rpu(new LatLng(-8.450579126087348, 114.32519941751357), "Signal 1", "Aktif", "Alamat Signal 1", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
+        rpu.add(new M_rpu(new LatLng(-8.216688925028878, 114.36196532018623), "Signal 2", "Aktif", "Alamat Signal 1", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
+        rpu.add(new M_rpu(new LatLng(-8.554158834400729, 114.10914383090599), "Signal 3", "Aktif", "Alamat Signal 1", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map_main);
@@ -134,10 +136,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ews)));
         }
 
-        for (SignalData signalData : signalData) {
-            LatLng latLng = signalData.getLatLng();
-            String locationName = signalData.getName();
-            String locationStat = signalData.getStatus();
+        for (M_rpu rpu : rpu) {
+            LatLng latLng = rpu.getLatLng();
+            String locationName = rpu.getName();
+            String locationStat = rpu.getStatus();
 
             int markerIconResource = R.drawable.signal_biru;
             if (locationStat.equals("Tidak Aktif")) {

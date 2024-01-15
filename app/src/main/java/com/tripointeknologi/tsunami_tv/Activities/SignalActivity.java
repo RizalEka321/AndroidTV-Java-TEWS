@@ -1,4 +1,4 @@
-package com.tripointeknologi.tsunami_tv;
+package com.tripointeknologi.tsunami_tv.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -31,6 +31,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.tripointeknologi.tsunami_tv.Models.M_rpu;
+import com.tripointeknologi.tsunami_tv.R;
+import com.tripointeknologi.tsunami_tv.Cards.SignalCardPresenter;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,10 +42,10 @@ import java.util.List;
 public class SignalActivity extends AppCompatActivity implements OnMapReadyCallback {
     Context ctx;
     Dialog detail;
-    int currentLocationIndex = -1;
+    int currentLocationIndex = 0;
     boolean isCardVisible = false;
     GoogleMap googleMap;
-    List<SignalData> signalData;
+    List<M_rpu> rpu;
     ArrayObjectAdapter rowsAdapter;
     RowsSupportFragment rowsFragment;
 
@@ -54,10 +57,11 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
 
         detail = new Dialog(this, R.style.CustomPopupTheme);
 
-        signalData = new ArrayList<>();
-        signalData.add(new SignalData(new LatLng(-8.450579126087348, 114.32519941751357), "Signal 1", "Aktif", "Alamat Signal 1", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
-        signalData.add(new SignalData(new LatLng(-8.216688925028878, 114.36196532018623), "Signal 2", "Aktif", "Alamat Signal 2", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
-        signalData.add(new SignalData(new LatLng(-8.554158834400729, 114.10914383090599), "Signal 3", "Aktif", "Alamat Signal 3", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
+        rpu = new ArrayList<>();
+        rpu.add(new M_rpu(new LatLng(-8.450579126087348, 114.32519941751357), "Signal 1", "Aktif", "Alamat Signal 1", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
+        rpu.add(new M_rpu(new LatLng(-8.216688925028878, 114.36196532018623), "Signal 2", "Aktif", "Alamat Signal 2", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
+        rpu.add(new M_rpu(new LatLng(-8.554158834400729, 114.10914383090599), "Signal 3", "Aktif", "Alamat Signal 3", "50v", "26 derajat", "04 Oktober 2023", "Sudah Bisa Digunakan", new Date()));
+
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map_signal);
         assert mapFragment != null;
@@ -68,7 +72,7 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         SignalCardPresenter cardPresenter = new SignalCardPresenter();
         ArrayObjectAdapter cardRowAdapter = new ArrayObjectAdapter(cardPresenter);
-        for (SignalData signal : signalData) {
+        for (M_rpu signal : rpu) {
             cardRowAdapter.add(signal);
         }
         ListRow row = new ListRow(cardRowAdapter);
@@ -78,8 +82,8 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         rowsFragment.setAdapter(rowsAdapter);
 
         rowsFragment.setOnItemViewClickedListener((OnItemViewClickedListener) (itemViewHolder, item, rowViewHolder, row1) -> {
-            if (item instanceof SignalData) {
-                SignalData signal = (SignalData) item;
+            if (item instanceof M_rpu) {
+                M_rpu signal = (M_rpu) item;
                 LatLng SignalData = signal.getLatLng();
                 moveCameraToMarker(SignalData);
             }
@@ -96,10 +100,10 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_map));
 
-        for (SignalData signalData : signalData) {
-            LatLng latLng = signalData.getLatLng();
-            String locationName = signalData.getName();
-            String locationStat = signalData.getStatus();
+        for (M_rpu rpu : rpu) {
+            LatLng latLng = rpu.getLatLng();
+            String locationName = rpu.getName();
+            String locationStat = rpu.getStatus();
 
             int markerIconResource = R.drawable.signal_biru;
             if (locationStat.equals("Tidak Aktif")) {
@@ -128,7 +132,8 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
     private void moveCameraToMarker(LatLng latLng) {
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng)
-                .zoom(12) // You can adjust the zoom level as needed
+                .zoom(20)
+                .tilt(60)
                 .build();
 
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), new GoogleMap.CancelableCallback() {
@@ -140,9 +145,9 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
             @Override
             public void onFinish() {
                 float minDistance = Float.MAX_VALUE;
-                SignalData closestLocation = null;
+                M_rpu closestLocation = null;
 
-                for (SignalData signal : signalData) {
+                for (M_rpu signal : rpu) {
                     LatLng markerPosition = signal.getLatLng();
                     float[] distance = new float[1];
                     Location.distanceBetween(
@@ -153,6 +158,7 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
                     }
                 }
                 if (closestLocation != null) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
                     detail(closestLocation);
                 }
             }
@@ -160,26 +166,24 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     @SuppressLint("SetTextI18n")
-    private void detail(SignalData signalData) {
+    private void detail(M_rpu rpu) {
         @SuppressLint("InflateParams")
         View view = LayoutInflater.from(this).inflate(R.layout.detail_signal, null);
         detail.setContentView(view);
 
-        TextView title = detail.findViewById(R.id.popup_title);
-        TextView nama = detail.findViewById(R.id.popup_detail_text_name);
-        TextView status = detail.findViewById(R.id.popup_detail_text_status);
-        TextView voltase = detail.findViewById(R.id.popup_detail_text_voltase);
-        TextView temperatur = detail.findViewById(R.id.popup_detail_text_temperatur);
-        TextView tanggal_akktifasi = detail.findViewById(R.id.popup_detail_text_tanggal_aktifasi);
-        TextView keterangan = detail.findViewById(R.id.popup_detail_text_keterangan);
+        TextView nama = detail.findViewById(R.id.detail_name);
+        TextView status = detail.findViewById(R.id.detail_status);
+        TextView voltase = detail.findViewById(R.id.detail_voltase);
+        TextView temperatur = detail.findViewById(R.id.detail_temperatur);
+        TextView tanggal_akktifasi = detail.findViewById(R.id.detail_tanggal_aktifasi);
+        TextView keterangan = detail.findViewById(R.id.detail_keterangan);
 
-        title.setText("Signal Details");
-        nama.setText(String.format(": %s", signalData.getName()));
-        status.setText(String.format(": %s", signalData.getStatus()));
-        voltase.setText(String.format(": %s", signalData.getVoltase()));
-        temperatur.setText(String.format(": %s", signalData.getTemperatur()));
-        tanggal_akktifasi.setText(String.format(": %s", signalData.getTanggal_aktifasi()));
-        keterangan.setText(String.format(": %s", signalData.getKeterangan()));
+        nama.setText(String.format(": %s", rpu.getName()));
+        status.setText(String.format(": %s", rpu.getStatus()));
+        voltase.setText(String.format(": %s", rpu.getVoltase()));
+        temperatur.setText(String.format(": %s", rpu.getTemperatur()));
+        tanggal_akktifasi.setText(String.format(": %s", rpu.getTanggal_aktifasi()));
+        keterangan.setText(String.format(": %s", rpu.getKeterangan()));
 
         Window window = detail.getWindow();
         if (window != null) {
@@ -202,13 +206,13 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
             if (currentLocationIndex > 0) {
                 currentLocationIndex--;
-                LatLng targetLatLng = signalData.get(currentLocationIndex).getLatLng();
+                LatLng targetLatLng = rpu.get(currentLocationIndex).getLatLng();
                 moveCamera(targetLatLng);
             }
         } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-            if (currentLocationIndex < signalData.size() - 1) {
+            if (currentLocationIndex < rpu.size() - 1) {
                 currentLocationIndex++;
-                LatLng targetLatLng = signalData.get(currentLocationIndex).getLatLng();
+                LatLng targetLatLng = rpu.get(currentLocationIndex).getLatLng();
                 moveCamera(targetLatLng);
             }
         }
@@ -218,8 +222,8 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
-            if (currentLocationIndex >= 0 && currentLocationIndex < signalData.size()) {
-                SignalData signal = signalData.get(currentLocationIndex);
+            if (currentLocationIndex >= 0 && currentLocationIndex < rpu.size()) {
+                M_rpu signal = rpu.get(currentLocationIndex);
                 detail(signal);
             }
         }

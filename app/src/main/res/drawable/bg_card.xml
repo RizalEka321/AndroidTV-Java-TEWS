@@ -3,6 +3,6 @@
     android:shape="rectangle"><!-- Adjust the radius to control the roundness -->
     <gradient
         android:angle="0"
-        android:endColor="#000351"
+        android:endColor="#0007B0"
         android:startColor="#0007B0" />
 </shape>
