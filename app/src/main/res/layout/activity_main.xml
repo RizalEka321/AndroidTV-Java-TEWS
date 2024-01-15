@@ -32,6 +32,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="7dp"
             android:background="@drawable/custom_marker_button"
+            android:fontFamily="@font/poppinsmedium"
             android:paddingStart="50dp"
             android:text="@string/button_marker" />
 
@@ -43,6 +44,7 @@
             android:layout_marginTop="7dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/custom_signal_button"
+            android:fontFamily="@font/poppinsmedium"
             android:paddingStart="50dp"
             android:text="@string/button_signal" />
     </LinearLayout>
