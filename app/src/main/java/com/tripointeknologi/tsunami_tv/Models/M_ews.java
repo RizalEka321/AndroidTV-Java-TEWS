@@ -38,6 +38,7 @@ public class M_ews {
     }
 
     public String getNama() {
+
         return nama;
     }
 

@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             googleMap.addMarker(new MarkerOptions()
                     .position(latLng)
                     .title(locationName)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.gif))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ews))
             );
         }
 
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             String locationName = rpu.getRpu_id();
             String locationStat = rpu.getStatus();
 
-            int markerIconResource = R.drawable.masjid_biru;
+            int markerIconResource = R.drawable.signal_biru;
             if (locationStat.equals("Off")) {
                 markerIconResource = R.drawable.signal_merah;
             }

@@ -29,7 +29,6 @@
         <fragment
             android:id="@+id/rows_fragment_signal"
             android:name="androidx.leanback.app.RowsSupportFragment"
-            android:layout_margin="20dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
