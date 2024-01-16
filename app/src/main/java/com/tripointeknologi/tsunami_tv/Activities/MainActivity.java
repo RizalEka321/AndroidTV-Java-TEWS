@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -166,10 +168,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             double longitude = Double.parseDouble(location.getLongitude());
             LatLng latLng = new LatLng(latitude, longitude);
             String locationName = location.getStatus();
+
             googleMap.addMarker(new MarkerOptions()
                     .position(latLng)
                     .title(locationName)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ews))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.gif))
             );
         }
 
@@ -180,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             String locationName = rpu.getRpu_id();
             String locationStat = rpu.getStatus();
 
-            int markerIconResource = R.drawable.signal_biru;
+            int markerIconResource = R.drawable.masjid_biru;
             if (locationStat.equals("Off")) {
                 markerIconResource = R.drawable.signal_merah;
             }

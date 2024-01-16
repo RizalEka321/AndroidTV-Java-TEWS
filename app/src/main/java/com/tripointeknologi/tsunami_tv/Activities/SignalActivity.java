@@ -218,12 +218,12 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
         TextView nama = detail.findViewById(R.id.detail_name);
         TextView status = detail.findViewById(R.id.detail_status);
         TextView tanggal_akktifasi = detail.findViewById(R.id.detail_tanggal_aktifasi);
-        TextView keterangan = detail.findViewById(R.id.detail_keterangan);
+        TextView alamat = detail.findViewById(R.id.detail_alamat);
 
-        nama.setText(String.format(": %s", rpu.getNama()));
+        nama.setText(String.format(": %s", rpu.getRpu_id()));
         status.setText(String.format(": %s", rpu.getStatus()));
         tanggal_akktifasi.setText(String.format(": %s", rpu.getTanggal()));
-        keterangan.setText(String.format(": %s", rpu.getAlamat()));
+        alamat.setText(String.format(": %s", rpu.getAlamat()));
 
         Window window = detail.getWindow();
         if (window != null) {

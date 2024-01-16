@@ -183,7 +183,7 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         name.setText(String.format(": %s", ews.getDevice_id()));
         status.setText(String.format(": %s", ews.getStatus()));
         date.setText(String.format(": %s", ews.getTanggal()));
-        lokasi.setText(String.format(": %s", ews.getStatus()));
+        lokasi.setText(String.format(": %s", ews.getAlamat()));
 
 
         Window window = popupD.getWindow();

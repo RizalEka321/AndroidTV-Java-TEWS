@@ -16,13 +16,11 @@
 
         <ImageView
             android:id="@+id/image_location"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
             android:contentDescription="@string/todo"
-            android:paddingTop="20dp"
-            android:src="@drawable/ews" />
+            android:src="@drawable/gambar_ews" />
     </FrameLayout>
 
     <TableLayout
@@ -37,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppinsmedium"
-                android:text="@string/peragkat"
+                android:text="@string/perangkat"
                 android:textColor="@android:color/white"
                 android:textStyle="bold" />
 

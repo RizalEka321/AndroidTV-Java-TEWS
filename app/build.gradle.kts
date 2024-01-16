@@ -45,4 +45,6 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.google.firebase:firebase-database:20.3.0")
+
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }
