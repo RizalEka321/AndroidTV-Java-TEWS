@@ -161,7 +161,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.getUiSettings().setMapToolbarEnabled(false);
-        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_map));
+        googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
 
         for (M_ews location : ews) {
             double latitude = Double.parseDouble(location.getLatitude());
@@ -172,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             googleMap.addMarker(new MarkerOptions()
                     .position(latLng)
                     .title(locationName)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ews))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.masjid))
             );
         }
 
@@ -183,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             String locationName = rpu.getRpu_id();
             String locationStat = rpu.getStatus();
 
-            int markerIconResource = R.drawable.signal_biru;
+            int markerIconResource = R.drawable.tower;
             if (locationStat.equals("Off")) {
                 markerIconResource = R.drawable.signal_merah;
             }
@@ -194,8 +195,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .icon(BitmapDescriptorFactory.fromResource(markerIconResource)));
         }
 
-        LatLng countryLatLng = new LatLng(-8.51811526213963, 114.26465950699851);
-        float zoomCountry = 10;
+        LatLng countryLatLng = new LatLng(-8.147571638285346, 114.07528397345405);
+        float zoomCountry = 9;
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(countryLatLng, zoomCountry));
     }

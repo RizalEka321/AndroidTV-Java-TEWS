@@ -45,7 +45,7 @@ public class SignalCardPresenter extends Presenter {
             int signalIconResource; // Default icon
 
             if ("On".equals(status)) {
-                signalIconResource = R.drawable.signal_biru;
+                signalIconResource = R.drawable.tower;
             } else {
                 signalIconResource = R.drawable.signal_merah;
             }

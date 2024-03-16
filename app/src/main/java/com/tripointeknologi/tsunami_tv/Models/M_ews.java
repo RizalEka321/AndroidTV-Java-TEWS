@@ -1,7 +1,5 @@
 package com.tripointeknologi.tsunami_tv.Models;
 
-import com.google.android.gms.maps.model.LatLng;
-
 public class M_ews {
     private String device_id;
     private String alamat;

@@ -9,19 +9,20 @@ import android.widget.VideoView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.tripointeknologi.tsunami_tv.R;
+import com.tripointeknologi.tsunami_tv.databinding.ActivitySplashBinding;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashScreenActivity extends AppCompatActivity {
-
-    private static final int waktu_loading = 10000;
+    ActivitySplashBinding b;
+    private static final int waktu_loading = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
-
+        b = ActivitySplashBinding.inflate(getLayoutInflater());
+        setContentView(b.getRoot());
         VideoView videoView = findViewById(R.id.splash);
-        Uri videoUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.splashscreen);
+        Uri videoUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.splashscreenp2);
 
         videoView.setVideoURI(videoUri);
         videoView.start();

@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -32,6 +33,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,7 +50,6 @@ import java.util.Date;
 import java.util.List;
 
 public class SignalActivity extends AppCompatActivity implements OnMapReadyCallback {
-    Context ctx;
     Dialog detail;
     int currentLocationIndex = 0;
     boolean isCardVisible = false;
@@ -57,6 +58,9 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
     ArrayObjectAdapter rowsAdapter;
     RowsSupportFragment rowsFragment;
     private DatabaseReference mDatabase;
+    Marker cameraMarker = null;
+    Handler infoWindowHandler = new Handler();
+    int INFO_WINDOW_DUR = 5000;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,11 +85,6 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
                     M_rpu location = statusSnapshot.getValue(M_rpu.class);
                     if (location != null) {
                         rpu.add(location);
-                        // Log the retrieved data
-                        Log.d("FirebaseData", "Device ID: " + location.getNama() +
-                                ", Status: " + location.getStatus() +
-                                ", Tanggal: " + location.getTanggal() +
-                                ", Latling: " + location.getLatitude());
                     }
                 }
 
@@ -137,7 +136,7 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.getUiSettings().setMapToolbarEnabled(false);
-        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_map));
+        googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
         for (M_rpu rpu : rpu) {
             double latitude = Double.parseDouble(rpu.getLatitude());
@@ -147,7 +146,7 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
             String locationName = rpu.getNama();
             String locationStat = rpu.getStatus();
 
-            int markerIconResource = R.drawable.signal_biru;
+            int markerIconResource = R.drawable.tower;
             if (locationStat.equals("Off")) {
                 markerIconResource = R.drawable.signal_merah;
             }
@@ -168,13 +167,66 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
                 .target(latLng)
                 .zoom(15)
                 .build();
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), new GoogleMap.CancelableCallback() {
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onFinish() {
+                float minDistance = Float.MAX_VALUE;
+                M_rpu closestLocation = null;
+
+                for (M_rpu signal : rpu) {
+                    double latitude = Double.parseDouble(signal.getLatitude());
+                    double longitude = Double.parseDouble(signal.getLongitude());
+                    LatLng markerPosition = new LatLng(latitude, longitude);
+
+                    float[] distance = new float[1];
+                    Location.distanceBetween(
+                            latLng.latitude, latLng.longitude, markerPosition.latitude, markerPosition.longitude, distance);
+
+                    if (distance[0] < minDistance && distance[0] < 500) {
+                        minDistance = distance[0];
+                        closestLocation = signal;
+                    }
+                }
+
+                if (closestLocation != null) {
+                    LatLng markerPosition = new LatLng(
+                            Double.parseDouble(closestLocation.getLatitude()),
+                            Double.parseDouble(closestLocation.getLongitude())
+                    );
+
+                    if (cameraMarker != null) {
+                        cameraMarker.remove();
+                    }
+
+                    cameraMarker = googleMap.addMarker(new MarkerOptions()
+                            .position(markerPosition)
+                            .title(closestLocation.getNama())
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.tower))
+                    );
+
+                    assert cameraMarker != null;
+                    cameraMarker.setTag(closestLocation);
+                    cameraMarker.showInfoWindow();
+
+                    infoWindowHandler.postDelayed(() -> {
+                        if (cameraMarker != null) {
+                            cameraMarker.hideInfoWindow();
+                        }
+                    }, INFO_WINDOW_DUR);
+                }
+            }
+        });
     }
 
     private void moveCameraToMarker(LatLng latLng) {
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng)
-                .zoom(20)
+                .zoom(15)
                 .tilt(60)
                 .build();
 
@@ -200,6 +252,14 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
                         minDistance = distance[0];
                         closestLocation = signal;
                     }
+
+                    cameraMarker = googleMap.addMarker(new MarkerOptions()
+                            .position(markerPosition)
+                            .title(signal.getNama())
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.tower))
+                    );
+
+                    cameraMarker.setTag(closestLocation);
                 }
                 if (closestLocation != null) {
                     googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
@@ -208,6 +268,7 @@ public class SignalActivity extends AppCompatActivity implements OnMapReadyCallb
             }
         });
     }
+
 
     @SuppressLint("SetTextI18n")
     private void detail(M_rpu rpu) {

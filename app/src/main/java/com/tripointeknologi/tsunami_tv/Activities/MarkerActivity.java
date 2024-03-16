@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,6 @@ import java.util.List;
 public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap googleMap;
     private List<M_ews> ews;
-    private Context ctx;
     private Dialog popupD;
     private ArrayObjectAdapter rowsAdapter;
     private RowsSupportFragment rowsFragment;
@@ -57,6 +57,8 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
     private Handler infoWindowHandler = new Handler();
     private int INFO_WINDOW_DUR = 5000;
     private DatabaseReference mDatabase;
+    int currentLocationIndex = 0;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,7 +110,9 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.getUiSettings().setMapToolbarEnabled(false);
-        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_map));
+//        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_map));
+        googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
 
         if (cameraMarker != null) {
             cameraMarker.remove();
@@ -122,7 +126,7 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
             googleMap.addMarker(new MarkerOptions()
                     .position(latLng)
                     .title(locationName)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ews))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.masjid))
             );
         }
 
@@ -131,10 +135,71 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(countryLatLng, zoomCountry));
     }
 
+    private void moveCamera(LatLng latLng) {
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(latLng)
+                .zoom(15)
+                .build();
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), new GoogleMap.CancelableCallback() {
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onFinish() {
+                float minDistance = Float.MAX_VALUE;
+                M_ews closestLocation = null;
+
+                for (M_ews signal : ews) {
+                    double latitude = Double.parseDouble(signal.getLatitude());
+                    double longitude = Double.parseDouble(signal.getLongitude());
+                    LatLng markerPosition = new LatLng(latitude, longitude);
+
+                    float[] distance = new float[1];
+                    Location.distanceBetween(
+                            latLng.latitude, latLng.longitude, markerPosition.latitude, markerPosition.longitude, distance);
+
+                    if (distance[0] < minDistance && distance[0] < 500) {
+                        minDistance = distance[0];
+                        closestLocation = signal;
+                    }
+                }
+
+                if (closestLocation != null) {
+                    LatLng markerPosition = new LatLng(
+                            Double.parseDouble(closestLocation.getLatitude()),
+                            Double.parseDouble(closestLocation.getLongitude())
+                    );
+
+                    if (cameraMarker != null) {
+                        cameraMarker.remove();
+                    }
+
+                    cameraMarker = googleMap.addMarker(new MarkerOptions()
+                            .position(markerPosition)
+                            .title(closestLocation.getNama())
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.masjid))
+                    );
+
+                    assert cameraMarker != null;
+                    cameraMarker.setTag(closestLocation);
+                    cameraMarker.showInfoWindow();
+
+                    infoWindowHandler.postDelayed(() -> {
+                        if (cameraMarker != null) {
+                            cameraMarker.hideInfoWindow();
+                        }
+                    }, INFO_WINDOW_DUR);
+                }
+            }
+        });
+    }
+
     private void moveCameraToMarker(LatLng latLng) {
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng)
-                .zoom(20)
+                .zoom(15)
                 .tilt(60)
                 .build();
 
@@ -231,5 +296,29 @@ public class MarkerActivity extends AppCompatActivity implements OnMapReadyCallb
 
             rowsFragment.requireView().setLayoutParams(params);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+            if (currentLocationIndex > 0) {
+                currentLocationIndex--;
+                M_ews currentRpu = ews.get(currentLocationIndex);
+                double latitude = Double.parseDouble(currentRpu.getLatitude());
+                double longitude = Double.parseDouble(currentRpu.getLongitude());
+                LatLng targetLatLng = new LatLng(latitude, longitude);
+                moveCamera(targetLatLng);
+            }
+        } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+            if (currentLocationIndex < ews.size() - 1) {
+                currentLocationIndex++;
+                M_ews currentRpu = ews.get(currentLocationIndex);
+                double latitude = Double.parseDouble(currentRpu.getLatitude());
+                double longitude = Double.parseDouble(currentRpu.getLongitude());
+                LatLng targetLatLng = new LatLng(latitude, longitude);
+                moveCamera(targetLatLng);
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

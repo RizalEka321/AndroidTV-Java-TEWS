@@ -39,7 +39,7 @@ public class MarkerCardPresenter extends Presenter {
 
         titleView.setText(location.getDevice_id());
         subtitleView.setText(location.getStatus());
-        imageView.setImageResource(R.drawable.ews);
+        imageView.setImageResource(R.drawable.masjid);
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
 //        viewHolder.view.requestFocus();
